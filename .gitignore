@@ -1,42 +1,79 @@
-.gradle
+# Результаты сборки
 build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
-*.iml
-*.ipr
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-
-### Eclipse ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
 bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# Системы сборки
+## Gradle
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
 
-### VS Code ###
+## Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+
+# Кэши зависимостей
+.cache/
+.workspace/
+
+# Java артефакты и бинарные файлы
+*.class
+*.ear
+*.gz
+*.jar
+*.tar
+*.war
+*.zip
+
+# Файлы сред разработки
+.apt_generated/
+.classpath
+.factorypath/
+.fleet/
+.idea/
+.iml
+.ipr
+.iws
+.nb-gradle/
+.project
+.settings/
+.springBeans
+.sts4-cache/
 .vscode/
+dist/
+nbbuild/
+nbdist/
 
-### Mac OS ###
+# Файлы окружения
+.env
+.env.*
+!.env.example
+
+# Логи и runtime файлы
+*.log
+logs/
+*.hprof
+hs_err_pid*
+java_error_in_*.log
+replay_pid*.log
+
+# Результаты тестирования
+test-output/
+test-results/
+*.jfr
+
+# Временные файлы
+tmp/
+*.tmp
+*.temp
+
+# Системные файлы ОС
 .DS_Store
+Thumbs.db
+
+# Инструменты анализа кода
+.sonarlint/
+.scannerwork/
