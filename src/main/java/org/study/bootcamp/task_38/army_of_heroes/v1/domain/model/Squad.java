@@ -1,12 +1,12 @@
-package org.study.bootcamp.task_38.army_of_heroes.v1;
+package org.study.bootcamp.task_38.army_of_heroes.v1.domain.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Squad {
 
-    private String name;
-    private List<Unit> units = new ArrayList<>();
+    private final String name;
+    private final List<Unit> units = new ArrayList<>();
 
     public Squad(String name, List<Unit> units) {
         this.name = name;

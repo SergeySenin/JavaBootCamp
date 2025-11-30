@@ -1,4 +1,6 @@
-package org.study.bootcamp.task_39.executor_of_orders.v1;
+package org.study.bootcamp.task_39.executor_of_tasks.v1.api.cli;
+
+import org.study.bootcamp.task_39.executor_of_tasks.v1.domain.model.Chore;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

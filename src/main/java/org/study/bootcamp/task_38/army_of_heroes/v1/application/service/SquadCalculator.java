@@ -1,8 +1,10 @@
-package org.study.bootcamp.task_38.army_of_heroes.v1;
+package org.study.bootcamp.task_38.army_of_heroes.v1.application.service;
+
+import org.study.bootcamp.task_38.army_of_heroes.v1.domain.model.Squad;
 
 public class SquadCalculator extends Thread {
 
-    private Squad squad;
+    private final Squad squad;
     private int result;
 
     public SquadCalculator(Squad squad) {

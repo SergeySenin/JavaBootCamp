@@ -1,8 +1,8 @@
-package org.study.bootcamp.task_39.executor_of_orders.v1;
+package org.study.bootcamp.task_39.executor_of_tasks.v1.domain.model;
 
 public class Chore implements Runnable {
 
-    private String chore;
+    private final String chore;
 
     public Chore(String chore) {
         this.chore = chore;

@@ -1,8 +1,8 @@
-package org.study.bootcamp.task_38.army_of_heroes.v1;
+package org.study.bootcamp.task_38.army_of_heroes.v1.domain.model;
 
 public class Unit {
 
-    private int power;
+    private final int power;
 
     public Unit(int power) {
         this.power = power;

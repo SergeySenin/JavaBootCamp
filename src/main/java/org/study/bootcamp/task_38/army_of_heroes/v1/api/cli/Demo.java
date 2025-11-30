@@ -1,4 +1,10 @@
-package org.study.bootcamp.task_38.army_of_heroes.v1;
+package org.study.bootcamp.task_38.army_of_heroes.v1.api.cli;
+
+import org.study.bootcamp.task_38.army_of_heroes.v1.application.service.Army;
+import org.study.bootcamp.task_38.army_of_heroes.v1.domain.model.Archer;
+import org.study.bootcamp.task_38.army_of_heroes.v1.domain.model.Mage;
+import org.study.bootcamp.task_38.army_of_heroes.v1.domain.model.Squad;
+import org.study.bootcamp.task_38.army_of_heroes.v1.domain.model.Swordsman;
 
 import java.util.List;
 
