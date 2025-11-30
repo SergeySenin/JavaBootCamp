@@ -1,6 +1,6 @@
-package org.study.bootcamp.task_37.microsoft.v1.api.cli;
+package org.study.bootcamp.task_37.microsoft_mail.v1.api.cli;
 
-import org.study.bootcamp.task_37.microsoft.v1.application.service.SenderRunnable;
+import org.study.bootcamp.task_37.microsoft_mail.v1.application.service.SenderRunnable;
 
 public class Demo {
 

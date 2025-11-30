@@ -1,4 +1,4 @@
-package org.study.bootcamp.task_37.microsoft.v1.application.service;
+package org.study.bootcamp.task_37.microsoft_mail.v1.application.service;
 
 public class SenderRunnable implements Runnable {
 
