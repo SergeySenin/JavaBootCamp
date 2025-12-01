@@ -7,10 +7,10 @@ public class SenderRunnable implements Runnable {
 
     public SenderRunnable(int startIndex, int endIndex) {
         if (startIndex < 0) {
-            throw new IllegalArgumentException("startIndex не может быть отрицательным");
+            throw new IllegalArgumentException("startIndex не может быть отрицательным!");
         }
         if (endIndex < startIndex) {
-            throw new IllegalArgumentException("endIndex не может быть меньше startIndex");
+            throw new IllegalArgumentException("endIndex не может быть меньше startIndex!");
         }
 
         this.startIndex = startIndex;
@@ -20,7 +20,12 @@ public class SenderRunnable implements Runnable {
     @Override
     public void run() {
         for (int i = startIndex; i < endIndex; i++) {
-            System.out.printf("Письмо %d отправлено (поток %s)%n", i, Thread.currentThread().getName());
+            if (i % 50 == 0 && Thread.currentThread().isInterrupted()) {
+                System.out.printf("Поток %s прерван! Завершение отправки после %d писем!%n",
+                        Thread.currentThread().getName(), i - startIndex);
+                return;
+            }
+            System.out.printf("Письмо %d отправлено! (поток %s)%n", i, Thread.currentThread().getName());
         }
     }
 }

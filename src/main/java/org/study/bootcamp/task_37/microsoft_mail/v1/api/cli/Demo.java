@@ -19,8 +19,19 @@ public class Demo {
             threads[i].start();
         }
 
-        for (Thread thread : threads) {
-            thread.join();
+        try {
+            for (Thread thread : threads) {
+                thread.join();
+            }
+        } catch (InterruptedException exception) {
+            System.out.println("Главный поток был прерван во время ожидания завершения потоков отправки!");
+            for (Thread thread : threads) {
+                if (thread.isAlive()) {
+                    thread.interrupt();
+                }
+            }
+            Thread.currentThread().interrupt();
+            return;
         }
 
         System.out.println("Все письма отправлены!");
