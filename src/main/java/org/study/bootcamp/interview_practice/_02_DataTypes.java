@@ -105,7 +105,7 @@ package org.study.bootcamp.interview_practice;
  *
  * @author Sergey
  */
-public class DataTypes {
+public class _02_DataTypes {
 
     // === ПРИМИТИВНЫЕ ТИПЫ ДАННЫХ ===
     // 0) Для представления "сырых" чисел, символов и логики
@@ -148,7 +148,7 @@ public class DataTypes {
     private char charValue;                               // 16-битный Unicode символ
 
     // Логический тип
-    private boolean booleanValue;                         // true или false
+    private boolean booleanValue;                         // true или false (правда или ложь)
 
 
     // === ССЫЛОЧНЫЕ ТИПЫ ДАННЫХ ===
@@ -190,6 +190,11 @@ public class DataTypes {
 
     // Классы-обёртки полезны, когда нужно хранить примитивные типы в коллекциях
     // Позволяют использовать дополнительные методы
+
+    // Параметр	           Стек (Stack)	                                       Куча (Heap)
+    // Размер              Очень ограничен                                     Больше
+    // Скорость работы     Очень высокая	                                   Медленнее
+    // Ошибки              StackOverflowError (если слишком много вызовов)     OutOfMemoryError (если куча переполнена)
 
 
     // === ССЫЛОЧНЫЕ ТИПЫ — ОБЁРТКИ ДЛЯ ПРИМИТИВНЫХ ТИПОВ ===
