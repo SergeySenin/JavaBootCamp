@@ -5,19 +5,25 @@ public class Chore implements Runnable {
     private final String chore;
 
     public Chore(String chore) {
+        if (chore == null || chore.isBlank()) {
+            throw new IllegalArgumentException("название задачи не должно быть пустым");
+        }
         this.chore = chore;
     }
 
     @Override
     public void run() {
-        System.out.println(Thread.currentThread().getName() + " выполняет задачу: " + chore);
+        String threadName = Thread.currentThread().getName();
+        System.out.printf("%s выполняет задачу: %s%n", threadName, chore);
+
         try {
-            Thread.sleep((long) (Math.random() * 2000 + 1000));
+            Thread.sleep(1000);
         } catch (InterruptedException exception) {
-            System.out.println("Задача " + chore + " была прервана...");
             Thread.currentThread().interrupt();
-            throw new RuntimeException(exception);
+            System.out.printf("%s прерван во время задачи: %s%n", threadName, chore);
+            return;
         }
-        System.out.println(Thread.currentThread().getName() + " завершил задачу: " + chore);
+
+        System.out.printf("%s завершил задачу: %s%n", threadName, chore);
     }
 }

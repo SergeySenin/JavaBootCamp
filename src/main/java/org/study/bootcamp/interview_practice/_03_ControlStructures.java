@@ -263,8 +263,8 @@ public class _03_ControlStructures {
     public void demonstrateBreak() {
         System.out.println("break — выход при достижении 5:");
         for (int i = 1; i <= 10; i++) {
-            if (i == 6) {
-                System.out.println("\nДостигли 6, выходим из цикла");
+            if (i == 5) {
+                System.out.println("\nДостигли 5, выходим из цикла");
                 break;
             }
             System.out.print(i + " ");
