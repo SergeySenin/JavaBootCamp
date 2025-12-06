@@ -10,6 +10,7 @@ import java.util.*;
 
 public class Demo {
     public static void main(String[] args) throws Exception {
+
         List<Company> companies = List.of(
                 new Company(101, "PollutingCo", 11815),
                 new Company(102, "SuperCompany", 14580),
