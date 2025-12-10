@@ -73,7 +73,7 @@ public class _07_AccessStaticAnnotations {
         AnnotationDemo demo = new AnnotationDemo();
         demo.safeCallDeprecated(); // вызов обёрнут, чтобы показать предупреждение @Deprecated
 
-        System.out.println("@SuppressWarnings позволяет локально скрыть предупреждение (реализация safeCallDeprecated)");
+        System.out.println("SuppressWarnings позволяет локально скрыть предупреждение (реализация safeCallDeprecated)");
         System.out.println();
     }
 
@@ -91,8 +91,6 @@ public class _07_AccessStaticAnnotations {
         System.out.println("Аннотации дают метаданные и помогают инструментам");
         System.out.println();
     }
-
-    // Вспомогательные классы и структуры
 
     // Показ доступности полей с разными модификаторами
     private static class AccessSample {
@@ -209,7 +207,7 @@ public class _07_AccessStaticAnnotations {
 
         @Deprecated
         public String deprecatedApi() {
-            return "  Этот метод помечен @Deprecated: в новом коде лучше избегать";
+            return "Этот метод помечен @Deprecated: в новом коде лучше избегать";
         }
     }
 

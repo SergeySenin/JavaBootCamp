@@ -95,7 +95,7 @@ public class _04_Strings {
         System.out.println("Корректный обход строки по символам:");
         welcome.codePoints().forEach(codePoint -> {
             String symbol = new String(Character.toChars(codePoint));
-            System.out.println("  символ '" + symbol + "' имеет код " + codePoint + " в Unicode");
+            System.out.println("символ '" + symbol + "' имеет код " + codePoint + " в Unicode");
         });
         System.out.println();
     }
@@ -142,7 +142,7 @@ public class _04_Strings {
 
     private static void reviewCoreStringMethods() {
         System.out.println("7) Частые методы String");
-        String text = "  Java rocks!  ";
+        String text = "Java rocks!  ";
         System.out.println("isBlank() → " + text.isBlank() + " — false, потому что внутри есть текст");
         System.out.println("strip() → '" + text.strip() + "' — удаляет пробелы включая Unicode");
         System.out.println("repeat(2) → '" + text.repeat(2) + "'");

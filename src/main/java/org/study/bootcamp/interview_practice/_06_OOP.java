@@ -83,8 +83,8 @@ public class _06_OOP {
     // Краткий итог по четырём принципам
     private static void summarizePrinciples() {
         System.out.println("6) Итог по четырём принципам ООП");
-        System.out.println("Инкапсуляция — скрываем поля, выдаём доступ через методы, " +
-                "чтобы держать данные в валидном состоянии");
+        System.out.println("Инкапсуляция — скрываем поля, выдаём доступ через методы," +
+                " чтобы держать данные в валидном состоянии");
         System.out.println("Наследование — разделяем общую логику в базовом классе и расширяем её в потомках;" +
                 " один класс может наследоваться только от одного другого класса");
         System.out.println("Полиморфизм — вызываем методы через ссылку родителя, получая конкретное поведение объекта");
@@ -123,7 +123,7 @@ public class _06_OOP {
     // Базовый класс для наследования
     private static class Animal {
         public void makeSound() {
-            System.out.println("  Animal: издаю базовый звук");
+            System.out.println("Animal: издаю базовый звук");
         }
     }
 
@@ -131,11 +131,11 @@ public class _06_OOP {
     private static class Dog extends Animal {
         @Override
         public void makeSound() {
-            System.out.println("  Dog: гав-гав!");
+            System.out.println("Dog: гав-гав!");
         }
 
         public void bark() {
-            System.out.println("  Dog: лает на незнакомца");
+            System.out.println("Dog: лает на незнакомца");
         }
     }
 
@@ -143,22 +143,22 @@ public class _06_OOP {
     private static class Cat extends Animal {
         @Override
         public void makeSound() {
-            System.out.println("  Cat: мяу!");
+            System.out.println("Cat: мяу!");
         }
     }
 
     // Перегруженный обработчик платежей показывает разные сигнатуры
     private static class PaymentProcessor {
         public void process(int amountInRubles) {
-            System.out.println("  Обработка платежа на сумму " + amountInRubles + " ₽");
+            System.out.println("Обработка платежа на сумму " + amountInRubles + " ₽");
         }
 
         public void process(double amount, String currency) {
-            System.out.println("  Обработка платежа: " + amount + " " + currency);
+            System.out.println("Обработка платежа: " + amount + " " + currency);
         }
 
         public void process(int amount, int installments) {
-            System.out.println("  Обработка платежа " + amount + " ₽ в " + installments + " платежах");
+            System.out.println("Обработка платежа " + amount + " ₽ в " + installments + " платежах");
         }
     }
 
@@ -184,14 +184,14 @@ public class _06_OOP {
     private static class EmailNotification extends NotificationService {
         @Override
         protected void dispatch(String destination, String message) {
-            System.out.println("  Email → " + destination + ": " + message);
+            System.out.println("Email → " + destination + ": " + message);
         }
     }
 
     private static class SmsNotification extends NotificationService {
         @Override
         protected void dispatch(String destination, String message) {
-            System.out.println("  SMS → " + destination + ": " + message);
+            System.out.println("SMS → " + destination + ": " + message);
         }
     }
 }

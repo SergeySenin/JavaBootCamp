@@ -69,12 +69,12 @@ public class _05_Arrays {
 
         System.out.println("Классический for с индексом — есть доступ к position");
         for (int index = 0; index < frameworks.length; index++) {
-            System.out.println("  frameworks[" + index + "] = " + frameworks[index]);
+            System.out.println("frameworks[" + index + "] = " + frameworks[index]);
         }
 
         System.out.println("for-each удобен для чтения, но переменная — копия значения");
         for (String framework : frameworks) {
-            System.out.println("  framework = " + framework);
+            System.out.println("framework = " + framework);
             framework = framework + "?"; // не меняет исходный массив
         }
         System.out.println("После for-each массив не изменился → " + Arrays.toString(frameworks));
@@ -82,7 +82,7 @@ public class _05_Arrays {
         int[] ratings = {1, 2, 3};
         System.out.println("for-each по примитивам также отдаёт копии: попытка изменить rating не влияет на массив");
         for (int rating : ratings) {
-            System.out.println("  rating до += 10 → " + rating);
+            System.out.println("rating до += 10 → " + rating);
             rating += 10; // копия, исходный элемент не затронут
         }
         System.out.println("После for-each ratings остался прежним → " + Arrays.toString(ratings));
@@ -156,7 +156,7 @@ public class _05_Arrays {
         emptyGrid[0][0] = 42;
         System.out.println("new int[2][3] заполняется нулями, можно перезаписывать по координатам:");
         for (int[] row : emptyGrid) {
-            System.out.println("  " + Arrays.toString(row));
+            System.out.println(Arrays.toString(row));
         }
         System.out.println();
     }
@@ -208,11 +208,11 @@ public class _05_Arrays {
         int[] safeCopy = Arrays.copyOf(original, original.length);
         System.arraycopy(original, 0, safeCopy, 0, original.length);
         safeCopy[1] = 55;
-        System.out.println("copyOf/System.arraycopy создают независимые копии: safeCopy = " +
-                Arrays.toString(safeCopy) + ", original остаётся " + Arrays.toString(original));
+        System.out.println("copyOf/System.arraycopy создают независимые копии: safeCopy =" +
+                Arrays.toString(safeCopy) + " , original остаётся " + Arrays.toString(original));
         System.out.println("Проверяйте индексы до доступа, особенно при чтении из БД или запросов");
-        System.out.println("Для многомерных массивов используйте Arrays.deepEquals " +
-                "для корректного сравнения вложенных структур");
+        System.out.println("Для многомерных массивов используйте Arrays.deepEquals" +
+                " для корректного сравнения вложенных структур");
         System.out.println();
     }
 }
