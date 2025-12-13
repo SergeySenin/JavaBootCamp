@@ -51,7 +51,7 @@ public class _06_OOP {
         Animal dogAsAnimal = new Dog();
         dogAsAnimal.makeSound();
 
-        System.out.println("Аннотация @Override помогает заметить опечатки в сигнатуре и гарантирует переопределение");
+        System.out.println("Аннотация Override помогает заметить опечатки в сигнатуре и гарантирует переопределение");
         System.out.println("super.makeSound() позволяет дополнить поведение родителя вместо полной замены");
         System.out.println();
     }
