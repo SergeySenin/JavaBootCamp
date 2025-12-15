@@ -5,7 +5,7 @@ package org.study.bootcamp.interview_practice;
  *
  * @author Sergey
  */
-public class _03_ControlStructures {
+public class _04_ControlStructures {
 
 /*
     === УСЛОВНЫЕ ОПЕРАТОРЫ ===
@@ -303,42 +303,42 @@ public class _03_ControlStructures {
 
     public static void main(String[] args) {
 
-        _03_ControlStructures ifDemoV1 = new _03_ControlStructures();
+        _04_ControlStructures ifDemoV1 = new _04_ControlStructures();
         System.out.println(" === if + else if + else ===");
         ifDemoV1.compareNumbers(1, 2);
         ifDemoV1.compareNumbers(4, 3);
         ifDemoV1.compareNumbers(5, 5);
 
-        _03_ControlStructures switchDemoV1 = new _03_ControlStructures();
+        _04_ControlStructures switchDemoV1 = new _04_ControlStructures();
         System.out.println("\n === switch + case (break) ===");
         switchDemoV1.printDayOfWeek(1);
         switchDemoV1.printDayOfWeek(6);
         switchDemoV1.printDayOfWeek(9);
 
-        _03_ControlStructures switchDemoV2 = new _03_ControlStructures();
+        _04_ControlStructures switchDemoV2 = new _04_ControlStructures();
         System.out.println("\n === switch + case (->) ===");
         switchDemoV2.printDayType(1);
         switchDemoV2.printDayType(6);
         switchDemoV2.printDayType(9);
 
-        _03_ControlStructures whileDemoV1 = new _03_ControlStructures();
+        _04_ControlStructures whileDemoV1 = new _04_ControlStructures();
         System.out.println("\n === while ===");
         whileDemoV1.countdown(3);
 
-        _03_ControlStructures doWhileDemoV1 = new _03_ControlStructures();
+        _04_ControlStructures doWhileDemoV1 = new _04_ControlStructures();
         System.out.println("\n === do-while ===");
         doWhileDemoV1.outputFromStartToLimit(3, 7);
 
-        _03_ControlStructures forV1 = new _03_ControlStructures();
+        _04_ControlStructures forV1 = new _04_ControlStructures();
         System.out.println("\n === for ===");
         forV1.printEvenNumbersInRange(1, 10);
 
-        _03_ControlStructures forEachV1 = new _03_ControlStructures();
+        _04_ControlStructures forEachV1 = new _04_ControlStructures();
         System.out.println("\n === for + each ===");
         String[] fruits = {"Яблоко", "Банан", "Апельсин"};
         forEachV1.printArrayElements(fruits);
 
-        _03_ControlStructures serviceOperatorsV1 = new _03_ControlStructures();
+        _04_ControlStructures serviceOperatorsV1 = new _04_ControlStructures();
         System.out.println("\n === Служебные операторы циклов ===");
         serviceOperatorsV1.demonstrateBreak();
         serviceOperatorsV1.demonstrateContinue();

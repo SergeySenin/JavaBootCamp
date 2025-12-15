@@ -7,7 +7,7 @@ import java.util.UUID;
  *
  * @author Sergey
  */
-public class _07_AccessStaticAnnotations {
+public class _06_AccessStaticAnnotations {
 
     // 1) Модификаторы доступа: показываем, что видно из одного пакета и из наследника
     private static void demonstrateAccessModifiers() {

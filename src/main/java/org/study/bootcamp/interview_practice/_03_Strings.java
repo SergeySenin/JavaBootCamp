@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  *
  * @author Sergey
  */
-public class _04_Strings {
+public class _03_Strings {
 
     private static void showStringPoolScheme() {
         System.out.println("1) Где живут строки");
@@ -69,11 +69,12 @@ public class _04_Strings {
     private static void iterateCharacters() {
         System.out.println("4) Работа с отдельными символами");
         String welcome = "Привет";
+        System.out.println(welcome);
 
         char firstLetter = welcome.charAt(0); // charAt берёт первый 16-битный элемент строки
         int lengthInCodeUnits = welcome.length(); // length возвращает количество таких элементов, а не букв алфавита
         int firstCodePoint = welcome.codePointAt(0); // codePointAt читает полный код символа в Unicode
-                                                           // Unicode — ...
+        // Unicode — стандарт кодирования символов, где каждому символу соответствует числовой код (code point)
 
         System.out.println("Первый символ через charAt: " + firstLetter);
         System.out.println("Длина строки как количества UTF-16 элементов: " + lengthInCodeUnits);
@@ -104,7 +105,7 @@ public class _04_Strings {
         }
 
         String preparedTags = tagBuilder.toString();
-        System.out.println(preparedTags + " — StringBuilder лучше для циклов и большого текста");
+        System.out.println(preparedTags + "— StringBuilder лучше для циклов и большого текста");
         System.out.println("StringBuffer работает так же, но синхронизирован для многопоточности");
         System.out.println();
     }
@@ -119,40 +120,58 @@ public class _04_Strings {
     private static void useStringBuilderOperations() {
         System.out.println("6) Частые методы StringBuilder");
         StringBuilder scenario = new StringBuilder("Base");
+        System.out.println("Исходный StringBuilder: \"" + scenario + "\"");
 
         scenario.append(" + tail");
-        scenario.insert(4, "#");
-        scenario.replace(0, 4, "Head");
-        scenario.delete(4, 5);
-        scenario.reverse();
+        System.out.println("append(\" + tail\") → \"" + scenario + "\"" + " (добавляет строку в конец)");
 
-        System.out.println("Результат цепочки операций: " + scenario);
-        System.out.println("Получить итоговую строку можно через toString()");
+        scenario.insert(4, "#");
+        System.out.println("insert(4, \"#\") → \"" + scenario + "\"" + " (вставляет символ '#' на позицию 4)");
+
+        scenario.replace(0, 4, "Head");
+        System.out.println("replace(0, 4, \"Head\") → \"" + scenario + "\"" + " (меняет символы с 0 по 3 на \"Head\")");
+
+        scenario.delete(4, 5);
+        System.out.println("delete(4, 5) → \"" + scenario + "\"" + " (удаляет символ на позиции 4 - тот самый '#')");
+
+        scenario.reverse();
+        System.out.println("reverse() → \"" + scenario + "\"" + " (переворачивает строку задом наперёд)");
+
+        System.out.println("Итоговый результат: \"" + scenario + "\"");
+        System.out.println("Важно: StringBuilder мутабельный - все операции меняют исходный объект");
+        System.out.println(
+                "Для получения финальной строки: " +
+                scenario.getClass().getSimpleName() + " → String: scenario.toString()"
+        );
         System.out.println();
     }
 
     private static void reviewCoreStringMethods() {
         System.out.println("7) Частые методы String");
+        String text = " Java rocks!";
+        System.out.println("Исходная строка: \"" + text + "\"");
 
-        String text = "Java rocks!  ";
+        System.out.println("isBlank() → " + text.isBlank() + " (содержит ли только пробелы или пуста)");
 
-        System.out.println("isBlank() → " + text.isBlank() + " — false, потому что внутри есть текст");
+        System.out.println("strip() → \"" + text.strip() + "\"" + " (удаляет все начальные и конечные пробелы)");
 
-        System.out.println("strip() → '" + text.strip() + "' — удаляет пробелы включая Unicode");
+        System.out.println("startsWith(\"Java\") → " + text.startsWith("Java") + " (начинается ли с \"Java\")");
 
-        System.out.println("repeat(2) → '" + text.repeat(2) + "'");
+        System.out.println("endsWith(\"rocks!\") → " + text.endsWith("rocks!") + " (заканчивается ли на \"rocks!\")");
 
-        System.out.println("startsWith('Java') → " + text.startsWith("Java"));
+        System.out.println("repeat(2) → \"" + text.repeat(2) + "\"" + " (повторяет строку 2 раза)");
 
-        System.out.println("endsWith('rocks!') → " + text.endsWith("rocks!"));
+        System.out.println("toLowerCase() → \"" +
+                text.toLowerCase() + "\"" + " (преобразует все символы в нижний регистр)");
 
-        System.out.println("replaceFirst('a', '@') → '" + text.replaceFirst("a", "@") + "'");
+        System.out.println("contains(\"rock\") → " +
+                text.contains("rock") + " (содержит ли подстроку \"rock\")");
 
-        System.out.println("contains('rock') → " + text.contains("rock") + " — ищет подстроку");
+        System.out.println("substring(2, 6) → \"" +
+                text.substring(2, 6) + "\"" + " (извлекает символы с индекса 2 по 5 включительно)");
 
-        System.out.println("substring(2, 6) → '" + text.substring(2, 6) + "' — берёт часть строки по индексам");
-
-        System.out.println("toLowerCase() → '" + text.toLowerCase() + "' — часто нужно перед сравнением");
+        System.out.println("replaceFirst(\"a\", \"@\") → \"" +
+                text.replaceFirst("a", "@") + "\"" + " (заменяет первое вхождение 'a' на '@')");
 
         System.out.println();
     }
@@ -161,12 +180,12 @@ public class _04_Strings {
     Дополнительная памятка по поиску и замене:
     - indexOf / contains — находят подстроку или говорят, что её нет (возвращают позицию или -1, либо boolean)
     - replace / replaceAll — заменяют текст; replaceAll интерпретирует первый аргумент как регулярное выражение
-    - substring(left, right) — берёт подстроку: левая граница включительно, правая не включительно.
+    - substring(left, right) — берёт подстроку: левая граница включительно, правая не включительно
     - String.join(delimiter, parts...) и String.valueOf(value) —
     безопасные способы склеить текст и числа без конкатенации в цикле
  */
 
-    // Форматирование — ...
+    // Форматирование — создание строки по шаблону с подстановкой значений
     private static void formatStrings() {
         System.out.println("8) Форматирование строк");
         String template = "Точка: (%d, %d)";
@@ -179,8 +198,8 @@ public class _04_Strings {
         System.out.println();
     }
 
-    // Pattern — ...
-    // Matcher — ...
+    // Pattern — скомпилированное регулярное выражение
+    // Matcher — объект для поиска совпадений в конкретной строке по Pattern
     private static void useRegularExpressions() {
         System.out.println("9) Регулярные выражения через Pattern и Matcher");
         Pattern phonePattern = Pattern.compile("\\+7-\\d{3}-\\d{3}-\\d{2}-\\d{2}");
@@ -206,7 +225,8 @@ public class _04_Strings {
         System.out.println("10) Кодировки: явная всегда лучше");
         String greeting = "Привет";
 
-        byte[] utf8Bytes = greeting.getBytes(StandardCharsets.UTF_8); // UTF — ...
+        // UTF — универсальное семейство кодировок Unicode (UTF-8, UTF-16 и др.)
+        byte[] utf8Bytes = greeting.getBytes(StandardCharsets.UTF_8);
         String restored = new String(utf8Bytes, StandardCharsets.UTF_8);
         System.out.println("UTF-8 байты: " + Arrays.toString(utf8Bytes));
         System.out.println("Восстановленная строка: " + restored);
@@ -233,14 +253,14 @@ public class _04_Strings {
     private static void highlightPitfalls() {
         System.out.println("12) Подводные камни");
         System.out.println("Objects.equals(a, b) безопаснее при возможных null");
-        System.out.println("В цикле лучше собирать строки через StringBuilder, а не через +");
         System.out.println(
-                "substring/replace/toUpperCase создают новые объекты " +
-                "— сохраняйте результат (переприсваивайте переменную)"
+                "В цикле лучше собирать строки через StringBuilder, а не через" +
+                " substring/replace/toUpperCase создают новые объекты" +
+                " — сохраняйте результат (переприсваивайте переменную)"
         );
         System.out.println(
-                "Для эмодзи и суррогатных (составных) пар используйте " +
-                "codePointAt/offsetByCodePoints вместо charAt"
+                "Для эмодзи и суррогатных (составных) пар используйте" +
+                " codePointAt/offsetByCodePoints вместо charAt"
         );
         System.out.println();
     }
