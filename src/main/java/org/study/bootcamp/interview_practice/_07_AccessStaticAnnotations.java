@@ -1,19 +1,13 @@
 package org.study.bootcamp.interview_practice;
 
+import java.util.UUID;
+
 /**
  * КЛАСС ДЛЯ ДЕМОНСТРАЦИИ МОДИФИКАТОРОВ ДОСТУПА, STATIC/FINAL И АННОТАЦИЙ В JAVA С ИХ ОСОБЕННОСТЯМИ
  *
  * @author Sergey
  */
 public class _07_AccessStaticAnnotations {
-
-    public static void main(String[] args) {
-        demonstrateAccessModifiers();
-        demonstrateStaticMembers();
-        demonstrateFinalUsage();
-        demonstrateAnnotations();
-        summarizeTakeaways();
-    }
 
     // 1) Модификаторы доступа: показываем, что видно из одного пакета и из наследника
     private static void demonstrateAccessModifiers() {
@@ -33,8 +27,10 @@ public class _07_AccessStaticAnnotations {
         engineer.fillContacts();
         engineer.printSummary();
 
-        System.out.println("В другом пакете default недоступен, protected виден только через наследование");
+        System.out.println("В другом пакете default недоступен," +
+                " protected виден только через наследование и через ссылку наследника");
         System.out.println("private всегда скрыт, поэтому поля меняем только методами класса");
+        System.out.println("Классы верхнего уровня бывают только public или package-private (без модификатора)");
         System.out.println();
     }
 
@@ -50,6 +46,7 @@ public class _07_AccessStaticAnnotations {
         System.out.println("Статические блоки выполняются один раз при загрузке класса — (вывод при первом обращении)");
 
         System.out.println("Внутри static нельзя использовать this, так как метод не привязан к конкретному объекту");
+        System.out.println("Static-методы не полиморфны: одинаковые сигнатуры в наследнике скрывают базовый метод");
         System.out.println();
     }
 
@@ -74,6 +71,8 @@ public class _07_AccessStaticAnnotations {
         demo.safeCallDeprecated(); // вызов обёрнут, чтобы показать предупреждение @Deprecated
 
         System.out.println("SuppressWarnings позволяет локально скрыть предупреждение (реализация safeCallDeprecated)");
+        System.out.println("Компиляторные аннотации не меняют логику," +
+                " но рантайм-аннотации могут управлять поведением фреймворков (Spring/JPA)");
         System.out.println();
     }
 
@@ -82,13 +81,14 @@ public class _07_AccessStaticAnnotations {
         System.out.println("5) Кратко:");
         System.out.println(
                 "public — видно везде;" +
-                " protected — в пакете и наследниках;" +
-                " default — только в пакете;" +
-                " private — только в классе"
+                        " protected — в пакете и наследниках;" +
+                        " default — только в пакете;" +
+                        " private — только в классе"
         );
         System.out.println("static принадлежит классу, разделяется всеми экземплярами;" +
                 " final фиксирует значение/метод/класс");
-        System.out.println("Аннотации дают метаданные и помогают инструментам");
+        System.out.println("Аннотации дают метаданные и помогают инструментам," +
+                " а рантайм-аннотации в фреймворках могут влиять на поведение");
         System.out.println();
     }
 
@@ -166,10 +166,10 @@ public class _07_AccessStaticAnnotations {
 
     // final переменные и методы
     private static class FinalExample {
-        private final int instanceId;
+        private final String instanceId;
 
         public FinalExample() {
-            this.instanceId = (int) (Math.random() * 1000); // присваиваем только в конструкторе
+            this.instanceId = IdGenerator.nextId();
         }
 
         public void printConfig() {
@@ -211,6 +211,15 @@ public class _07_AccessStaticAnnotations {
         }
     }
 
+    private static final class IdGenerator {
+        private IdGenerator() {
+        }
+
+        static String nextId() { // вложенные классы одного внешнего класса имеют доступ к членам друг друга
+            return UUID.randomUUID().toString();
+        }
+    }
+
     // Финальный класс: нельзя наследовать, полезно для неизменяемых объектов
     private static final class ImmutableComponent {
         private final String name;
@@ -222,5 +231,13 @@ public class _07_AccessStaticAnnotations {
         public String getName() {
             return name;
         }
+    }
+
+    public static void main(String[] args) {
+        demonstrateAccessModifiers();
+        demonstrateStaticMembers();
+        demonstrateFinalUsage();
+        demonstrateAnnotations();
+        summarizeTakeaways();
     }
 }

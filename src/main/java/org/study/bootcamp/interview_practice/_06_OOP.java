@@ -1,30 +1,25 @@
 package org.study.bootcamp.interview_practice;
 
 /**
- * КЛАСС ДЛЯ ДЕМОНСТРАЦИИ ООП В JAVA И ИХ ОСОБЕННОСТЕЙ
+ * КЛАСС ДЛЯ ДЕМОНСТРАЦИИ ООП В JAVA И ЕГО ОСОБЕННОСТЕЙ
  *
  * @author Sergey
  */
 public class _06_OOP {
-
-    public static void main(String[] args) {
-        demonstrateEncapsulation();
-        demonstrateInheritance();
-        demonstratePolymorphism();
-        demonstrateOverloading();
-        demonstrateAbstraction();
-        summarizePrinciples();
-    }
+/*
+    === OOP ===
+    Это ...
+ */
 
     // Инкапсуляция скрывает поля и отдаёт доступ через методы — так проще контролировать корректность данных
     private static void demonstrateEncapsulation() {
         System.out.println("1) Инкапсуляция: данные под контролем");
         UserProfile profile = new UserProfile();
-        profile.setUsername("spring_student"); // setter проводит проверку и не даёт пустое значение
-        profile.setAge(22); // можно добавить валидацию (например, ограничить возраст)
+        profile.setUsername("spring_student");
+        profile.setAge(22);
         System.out.println("Геттеры открывают только нужную информацию: username=" +
                 profile.getUsername() + ", age=" + profile.getAge());
-        System.out.println("Прямого доступа к полям нет: нельзя присвоить отрицательный возраст или null-логин");
+        System.out.println("Прямого доступа к полям нет, а недопустимые значения отсекает валидация сеттеров");
         System.out.println();
     }
 
@@ -35,8 +30,8 @@ public class _06_OOP {
         animal.makeSound();
 
         Dog dog = new Dog();
-        dog.makeSound(); // унаследованный метод
-        dog.bark(); // метод конкретной собаки
+        dog.makeSound();
+        dog.bark();
 
         System.out.println("Дочерний класс получает public/protected члены родителя, но конструкторы не наследуются");
         System.out.println();
@@ -44,9 +39,9 @@ public class _06_OOP {
 
     // Полиморфизм: обращаемся к объектам через ссылку родителя, а вызывается переопределённая версия
     private static void demonstratePolymorphism() {
-        System.out.println("3) Полиморфизм: @Override выбирает реализацию");
-        Animal catAsAnimal = new Cat(); // ссылка родительского типа
-        catAsAnimal.makeSound(); // выполнится версия Cat, а не Animal
+        System.out.println("3) Полиморфизм: реализацию выбирает динамическая диспетчеризация JVM");
+        Animal catAsAnimal = new Cat();
+        catAsAnimal.makeSound();
 
         Animal dogAsAnimal = new Dog();
         dogAsAnimal.makeSound();
@@ -56,20 +51,9 @@ public class _06_OOP {
         System.out.println();
     }
 
-    // Перегрузка методов: одна задача с разными параметрами — без наследования
-    private static void demonstrateOverloading() {
-        System.out.println("4) Перегрузка методов (overloading)");
-        PaymentProcessor processor = new PaymentProcessor();
-        processor.process(1500);
-        processor.process(999.99, "RUB");
-        processor.process(500, 2); // ещё одна сигнатура
-        System.out.println("Перегрузка различается набором параметров: типы или количество аргументов");
-        System.out.println();
-    }
-
     // Абстракция: через абстрактный класс задаём общие методы и вынуждаем потомков реализовать детали
     private static void demonstrateAbstraction() {
-        System.out.println("5) Абстракция: обязательные шаги задаются в базовом классе");
+        System.out.println("4) Абстракция: шаблонный метод фиксирует алгоритм, вариативный шаг в подклассе");
         NotificationService emailService = new EmailNotification();
         NotificationService smsService = new SmsNotification();
 
@@ -80,7 +64,6 @@ public class _06_OOP {
         System.out.println();
     }
 
-    // Краткий итог по четырём принципам
     private static void summarizePrinciples() {
         System.out.println("6) Итог по четырём принципам ООП");
         System.out.println("Инкапсуляция — скрываем поля, выдаём доступ через методы," +
@@ -88,6 +71,8 @@ public class _06_OOP {
         System.out.println("Наследование — разделяем общую логику в базовом классе и расширяем её в потомках;" +
                 " один класс может наследоваться только от одного другого класса");
         System.out.println("Полиморфизм — вызываем методы через ссылку родителя, получая конкретное поведение объекта");
+        System.out.println("Overload vs override:" +
+                " перегрузка меняет параметры в одном классе, переопределение меняет реализацию у наследника");
         System.out.println("Абстракция — выделяем ключевые операции и заставляем потомков реализовать детали");
         System.out.println();
     }
@@ -131,6 +116,7 @@ public class _06_OOP {
     private static class Dog extends Animal {
         @Override
         public void makeSound() {
+            super.makeSound();
             System.out.println("Dog: гав-гав!");
         }
 
@@ -147,26 +133,11 @@ public class _06_OOP {
         }
     }
 
-    // Перегруженный обработчик платежей показывает разные сигнатуры
-    private static class PaymentProcessor {
-        public void process(int amountInRubles) {
-            System.out.println("Обработка платежа на сумму " + amountInRubles + " ₽");
-        }
-
-        public void process(double amount, String currency) {
-            System.out.println("Обработка платежа: " + amount + " " + currency);
-        }
-
-        public void process(int amount, int installments) {
-            System.out.println("Обработка платежа " + amount + " ₽ в " + installments + " платежах");
-        }
-    }
-
     // Абстрактный класс: общее API и базовая реализация некоторых шагов
     private abstract static class NotificationService {
         public void send(String destination, String message) {
-            validate(destination, message); // общий шаг проверки
-            dispatch(destination, message); // конкретная отправка в подклассах
+            validate(destination, message);
+            dispatch(destination, message);
         }
 
         protected void validate(String destination, String message) {
@@ -193,5 +164,13 @@ public class _06_OOP {
         protected void dispatch(String destination, String message) {
             System.out.println("SMS → " + destination + ": " + message);
         }
+    }
+
+    public static void main(String[] args) {
+        demonstrateEncapsulation();
+        demonstrateInheritance();
+        demonstratePolymorphism();
+        demonstrateAbstraction();
+        summarizePrinciples();
     }
 }

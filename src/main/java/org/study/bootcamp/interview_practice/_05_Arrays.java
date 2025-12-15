@@ -12,23 +12,15 @@ import java.util.List;
 public class _05_Arrays {
 
 /*
+    === МАССИВЫ ===
+    Это ...
+
     Короткая памятка:
     - индексация массива всегда начинается с нуля
     - пустой массив примитивов заполняется нулями, а массив ссылочных типов — null
     - его нельзя создать без указания точного размера и «растянуть» после создания
     - чтобы получить другой размер, создайте новый массив или используйте коллекции (например, ArrayList)
  */
-
-    public static void main(String[] args) {
-        declareAndInitializeArrays();
-        accessAndMutateElements();
-        iterateArraysSafely();
-        useArraysUtilityMethods();
-        workWithMultidimensionalArrays();
-        handleJaggedArrays();
-        compareArrayAndArrayList();
-        highlightArrayPitfalls();
-    }
 
 /*
         Объявление с указанием размера -> создание массива заданного размера
@@ -229,5 +221,16 @@ public class _05_Arrays {
         System.out.println("Для многомерных массивов используйте Arrays.deepEquals" +
                 " для корректного сравнения вложенных структур");
         System.out.println();
+    }
+
+    public static void main(String[] args) {
+        declareAndInitializeArrays();
+        accessAndMutateElements();
+        iterateArraysSafely();
+        useArraysUtilityMethods();
+        workWithMultidimensionalArrays();
+        handleJaggedArrays();
+        compareArrayAndArrayList();
+        highlightArrayPitfalls();
     }
 }

@@ -14,21 +14,6 @@ import java.util.regex.Pattern;
  */
 public class _04_Strings {
 
-    public static void main(String[] args) {
-        showStringPoolScheme();
-        showImmutability();
-        compareValuesAndReferences();
-        iterateCharacters();
-        concatenateProperly();
-        useStringBuilderOperations();
-        reviewCoreStringMethods();
-        formatStrings();
-        useRegularExpressions();
-        convertEncodingsSafely();
-        useTextBlocks();
-        highlightPitfalls();
-    }
-
     private static void showStringPoolScheme() {
         System.out.println("1) Где живут строки");
         // Литерал берёт готовый объект из String Pool — удобно, когда нужны повторяющиеся неизменяемые строки
@@ -68,7 +53,11 @@ public class _04_Strings {
 
         System.out.println("== проверяет ссылки → " + sameReference);
         System.out.println("equals проверяет текст → " + sameText);
-        System.out.println("compareTo(\"abc\", \"abd\") → " + lexicalOrder + " (отрицательное — abc раньше)");
+        System.out.println(
+                "compareTo(\"abc\", \"abd\") → " +
+                        lexicalOrder +
+                        " (отрицательное — abc раньше)"
+        );
         System.out.println(
                 "compareToIgnoreCase(\"abc\", \"ABC\") → " +
                         ignoreCaseOrder +
@@ -80,16 +69,16 @@ public class _04_Strings {
     private static void iterateCharacters() {
         System.out.println("4) Работа с отдельными символами");
         String welcome = "Привет";
+
         char firstLetter = welcome.charAt(0); // charAt берёт первый 16-битный элемент строки
         int lengthInCodeUnits = welcome.length(); // length возвращает количество таких элементов, а не букв алфавита
         int firstCodePoint = welcome.codePointAt(0); // codePointAt читает полный код символа в Unicode
+                                                           // Unicode — ...
 
         System.out.println("Первый символ через charAt: " + firstLetter);
         System.out.println("Длина строки как количества UTF-16 элементов: " + lengthInCodeUnits);
         System.out.println(
-                "Полный код первого символа (code point): " +
-                        firstCodePoint +
-                        " — подходит для эмодзи и редких знаков"
+                "Полный код первого символа (code point): " + firstCodePoint + " — подходит для эмодзи и редких знаков"
         );
 
         System.out.println("Корректный обход строки по символам:");
@@ -113,6 +102,7 @@ public class _04_Strings {
         for (String tag : tags) {
             tagBuilder.append("[").append(tag).append("] ");
         }
+
         String preparedTags = tagBuilder.toString();
         System.out.println(preparedTags + " — StringBuilder лучше для циклов и большого текста");
         System.out.println("StringBuffer работает так же, но синхронизирован для многопоточности");
@@ -129,6 +119,7 @@ public class _04_Strings {
     private static void useStringBuilderOperations() {
         System.out.println("6) Частые методы StringBuilder");
         StringBuilder scenario = new StringBuilder("Base");
+
         scenario.append(" + tail");
         scenario.insert(4, "#");
         scenario.replace(0, 4, "Head");
@@ -142,16 +133,27 @@ public class _04_Strings {
 
     private static void reviewCoreStringMethods() {
         System.out.println("7) Частые методы String");
+
         String text = "Java rocks!  ";
+
         System.out.println("isBlank() → " + text.isBlank() + " — false, потому что внутри есть текст");
+
         System.out.println("strip() → '" + text.strip() + "' — удаляет пробелы включая Unicode");
+
         System.out.println("repeat(2) → '" + text.repeat(2) + "'");
+
         System.out.println("startsWith('Java') → " + text.startsWith("Java"));
+
         System.out.println("endsWith('rocks!') → " + text.endsWith("rocks!"));
+
         System.out.println("replaceFirst('a', '@') → '" + text.replaceFirst("a", "@") + "'");
+
         System.out.println("contains('rock') → " + text.contains("rock") + " — ищет подстроку");
+
         System.out.println("substring(2, 6) → '" + text.substring(2, 6) + "' — берёт часть строки по индексам");
+
         System.out.println("toLowerCase() → '" + text.toLowerCase() + "' — часто нужно перед сравнением");
+
         System.out.println();
     }
 
@@ -164,10 +166,12 @@ public class _04_Strings {
     безопасные способы склеить текст и числа без конкатенации в цикле
  */
 
+    // Форматирование — ...
     private static void formatStrings() {
         System.out.println("8) Форматирование строк");
         String template = "Точка: (%d, %d)";
         String formatted = String.format(template, 10, 20);
+
         System.out.println(formatted + " — String.format возвращает новую строку по шаблону");
         System.out.printf("printf печатает сразу: число %.2f и строка %s%n", 3.14159, "demo");
         System.out.println("Плейсхолдеры: %d — целое, %f — дробь, %s — строка, %n — перенос строки");
@@ -175,16 +179,20 @@ public class _04_Strings {
         System.out.println();
     }
 
+    // Pattern — ...
+    // Matcher — ...
     private static void useRegularExpressions() {
         System.out.println("9) Регулярные выражения через Pattern и Matcher");
         Pattern phonePattern = Pattern.compile("\\+7-\\d{3}-\\d{3}-\\d{2}-\\d{2}");
         Matcher matcher = phonePattern.matcher("+7-999-123-45-67");
+
         boolean matches = matcher.matches();
         System.out.println("Совпадает ли номер? " + matches + " — matches требует совпадения всей строки");
         if (matches) {
             String operatorCode = matcher.group().substring(3, 6);
             System.out.println("Код оператора: " + operatorCode + " — можно извлекать части найденной строки");
         }
+
         String[] parts = "a1b2c3".split("\\d");
         System.out.println("split по цифрам → " + Arrays.toString(parts) + " — делит строку по шаблону");
         System.out.println(
@@ -197,7 +205,8 @@ public class _04_Strings {
     private static void convertEncodingsSafely() {
         System.out.println("10) Кодировки: явная всегда лучше");
         String greeting = "Привет";
-        byte[] utf8Bytes = greeting.getBytes(StandardCharsets.UTF_8);
+
+        byte[] utf8Bytes = greeting.getBytes(StandardCharsets.UTF_8); // UTF — ...
         String restored = new String(utf8Bytes, StandardCharsets.UTF_8);
         System.out.println("UTF-8 байты: " + Arrays.toString(utf8Bytes));
         System.out.println("Восстановленная строка: " + restored);
@@ -225,10 +234,29 @@ public class _04_Strings {
         System.out.println("12) Подводные камни");
         System.out.println("Objects.equals(a, b) безопаснее при возможных null");
         System.out.println("В цикле лучше собирать строки через StringBuilder, а не через +");
-        System.out.println("substring/replace/toUpperCase создают новые объекты " +
-                "— сохраняйте результат (переприсваивайте переменную)");
-        System.out.println("Для эмодзи и суррогатных (составных) пар используйте " +
-                "codePointAt/offsetByCodePoints вместо charAt");
+        System.out.println(
+                "substring/replace/toUpperCase создают новые объекты " +
+                "— сохраняйте результат (переприсваивайте переменную)"
+        );
+        System.out.println(
+                "Для эмодзи и суррогатных (составных) пар используйте " +
+                "codePointAt/offsetByCodePoints вместо charAt"
+        );
         System.out.println();
+    }
+
+    public static void main(String[] args) {
+        showStringPoolScheme();
+        showImmutability();
+        compareValuesAndReferences();
+        iterateCharacters();
+        concatenateProperly();
+        useStringBuilderOperations();
+        reviewCoreStringMethods();
+        formatStrings();
+        useRegularExpressions();
+        convertEncodingsSafely();
+        useTextBlocks();
+        highlightPitfalls();
     }
 }
