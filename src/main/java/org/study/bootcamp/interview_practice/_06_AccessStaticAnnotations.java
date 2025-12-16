@@ -3,141 +3,80 @@ package org.study.bootcamp.interview_practice;
 import java.util.UUID;
 
 /**
- * КЛАСС ДЛЯ ДЕМОНСТРАЦИИ МОДИФИКАТОРОВ ДОСТУПА, STATIC/FINAL И АННОТАЦИЙ В JAVA С ИХ ОСОБЕННОСТЯМИ
+ * КЛАСС ДЛЯ ДЕМОНСТРАЦИИ STATIC/FINAL, МОДИФИКАТОРОВ ДОСТУПА И АННОТАЦИЙ В JAVA С ИХ ОСОБЕННОСТЯМИ
  *
  * @author Sergey
  */
 public class _06_AccessStaticAnnotations {
 
-    // 1) Модификаторы доступа: показываем, что видно из одного пакета и из наследника
-    private static void demonstrateAccessModifiers() {
-        System.out.println("1) Модификаторы доступа: public/private/protected/default");
+/*
+    static — ключевое слово, которое делает член (поле/метод/блок/вложенный класс) принадлежащим классу, а не объекту;
+    используется, когда: поведение не зависит от состояния конкретного объекта и данные общие для всех объектов
+    1) static поле
+    - в памяти JVM существует ровно один экземпляр static-поля на весь класс, а не на каждый объект
+    - любое изменение static-поля видно всем объектам этого класса
+    - инициализируется при загрузке класса и существует до выгрузки класса
+    - типичный пример: константы (static final), счётчик созданных объектов, кеш
+    2) static метод
+    - вызывается без объекта: MathUtil.square(5); создавать new MathUtil() не нужно и нельзя (часто конструктор private)
+    - так как нет конкретного объекта: нельзя использовать this, нельзя обращаться к нестатическим полям;
+      решение проблемы: создать объект и обратиться через него или получить объект извне и работать с ним
+    - напрямую имеет доступ только к static-полям/методам
+    - типичный пример: утилитарные методы (Math), фабрики (of/from/valueOf), валидация
+    3) static init блок
+    - обычный блок кода, помеченный static: выполняется один раз, автоматически, при первой загрузке класса JVM
+    - это не поле и не метод; его нельзя вызвать вручную; он нужен, когда инициализация сложнее, чем = значение
+    - типичный пример: загрузка конфигурации, логирование факта загрузки класса, сложная инициализация static-данных
+    4) static и наследование
+    - static методы не переопределяются (override)
+    - они скрываются (method hiding), то есть ...
+    - выбор метода идёт по типу ссылки (compile-time), а не по типу объекта (runtime), то есть ...
+ */
 
-        AccessSample sample = new AccessSample();
-        sample.publicName = "Доступен всем"; // public — можно читать и изменять откуда угодно
-        sample.city = "Виден в пакете"; // default (package-private) — виден только в пакете
-        // sample.privateToken = "Секрет"; // private — раскомментируйте, чтобы увидеть ошибку доступа
-        sample.setPrivateToken("Секрет задаём через метод"); // контроль через геттер/сеттер
-        sample.protectedNote = "Виден в пакете и наследниках"; // protected допустим в этом пакете
+    private static void demonstrateStatic() {
+        System.out.println("1) static: поле/метод принадлежат классу, а не объекту");
 
-        sample.printSummary();
-
-        System.out.println("Наследник в том же пакете видит protected и default: (класс SupportEngineer)");
-        SupportEngineer engineer = new SupportEngineer();
-        engineer.fillContacts();
-        engineer.printSummary();
-
-        System.out.println("В другом пакете default недоступен," +
-                " protected виден только через наследование и через ссылку наследника");
-        System.out.println("private всегда скрыт, поэтому поля меняем только методами класса");
-        System.out.println("Классы верхнего уровня бывают только public или package-private (без модификатора)");
-        System.out.println();
-    }
-
-    // 2) static — общее состояние и методы, принадлежащие классу, а не объекту
-    private static void demonstrateStaticMembers() {
-        System.out.println("2) static: общее для всех экземпляров");
-
-        StaticCounter first = new StaticCounter();
-        StaticCounter second = new StaticCounter();
-        System.out.println("Значение счётчика после создания двух объектов: " + StaticCounter.getCreatedCount());
-
-        System.out.println("Статический метод доступен без объектов: MathHelper.square(5) = " + MathHelper.square(5));
-        System.out.println("Статические блоки выполняются один раз при загрузке класса — (вывод при первом обращении)");
-
-        System.out.println("Внутри static нельзя использовать this, так как метод не привязан к конкретному объекту");
-        System.out.println("Static-методы не полиморфны: одинаковые сигнатуры в наследнике скрывают базовый метод");
-        System.out.println();
-    }
-
-    // 3) final — фиксируем значение, запрет на наследование или переопределение
-    private static void demonstrateFinalUsage() {
-        System.out.println("3) final: закрепляем неизменяемость");
-
-        System.out.println("Константа PI: " + Constants.PI); // static final — общая константа
-        FinalExample example = new FinalExample();
-        example.printConfig();
-
-        System.out.println("Финальный метод нельзя переопределить: (BasePaymentService#describe())");
-        System.out.println("Финальный класс нельзя наследовать: (class ImmutableComponent)");
-        System.out.println();
-    }
-
-    // 4) Аннотации: подсказки для компилятора и инструментов, не меняют логику
-    private static void demonstrateAnnotations() {
-        System.out.println("4) Аннотации: метаданные для проверок и инструментов");
-
-        AnnotationDemo demo = new AnnotationDemo();
-        demo.safeCallDeprecated(); // вызов обёрнут, чтобы показать предупреждение @Deprecated
-
-        System.out.println("SuppressWarnings позволяет локально скрыть предупреждение (реализация safeCallDeprecated)");
-        System.out.println("Компиляторные аннотации не меняют логику," +
-                " но рантайм-аннотации могут управлять поведением фреймворков (Spring/JPA)");
-        System.out.println();
-    }
-
-    // 5) Итоговый блок-памятка
-    private static void summarizeTakeaways() {
-        System.out.println("5) Кратко:");
+        System.out.println("Сценарий A: static-поле общее для всех объектов (счётчик созданных экземпляров)");
+        System.out.println("Действие: создаём два объекта InstanceCounter");
+        InstanceCounter first = new InstanceCounter();
+        InstanceCounter second = new InstanceCounter();
         System.out.println(
-                "public — видно везде;" +
-                        " protected — в пакете и наследниках;" +
-                        " default — только в пакете;" +
-                        " private — только в классе"
+                "Результат: InstanceCounter.getCreatedCount() → " + InstanceCounter.getCreatedCount()
+                        + " (ожидаемо 2, потому что поле одно на класс)"
         );
-        System.out.println("static принадлежит классу, разделяется всеми экземплярами;" +
-                " final фиксирует значение/метод/класс");
-        System.out.println("Аннотации дают метаданные и помогают инструментам," +
-                " а рантайм-аннотации в фреймворках могут влиять на поведение");
+
+        System.out.println();
+        System.out.println("Сценарий B: static-метод вызывается без объекта (утилитарная логика)");
+        System.out.println(
+                "MathUtil.square(5) → " + MathUtil.square(5) + " (метод статический, объект создавать не нужно)"
+        );
+
+        System.out.println();
+        System.out.println("Сценарий C: static init-блок выполняется один раз при загрузке класса");
+        System.out.println("Строка \"[InstanceCounter] class loaded\" печатается один раз при первом обращении");
+
+        System.out.println();
+        System.out.println("Сценарий D: static-методы не полиморфны (не override, а hiding)");
+        Parent parentRefToChild = new Child();
+        System.out.println("Parent.describe() → " + Parent.describe() + " (вызов по имени класса: всегда Parent)");
+        System.out.println("Child.describe() → " + Child.describe() + " (вызов по имени класса: всегда Child)");
+        System.out.println(
+                "parentRefToChild.describeInstance() → " + parentRefToChild.describeInstance()
+                        + " (это уже не static: выбирается реализация по объекту)"
+        );
+
         System.out.println();
     }
 
-    // Показ доступности полей с разными модификаторами
-    private static class AccessSample {
-        public String publicName = "";
-        private String privateToken = "";
-        protected String protectedNote = "";
-        String city = ""; // default (package-private)
-
-        public String getPrivateToken() {
-            return privateToken;
-        }
-
-        public void setPrivateToken(String privateToken) {
-            if (privateToken == null || privateToken.isBlank()) {
-                throw new IllegalArgumentException("Токен не может быть пустым");
-            }
-            this.privateToken = privateToken;
-        }
-
-        public void printSummary() {
-            System.out.println("publicName=" + publicName);
-            System.out.println("privateToken=" + privateToken);
-            System.out.println("protectedNote=" + protectedNote);
-            System.out.println("city=" + city);
-        }
-    }
-
-    // Наследник может обратиться к protected и default полям, если он в том же пакете
-    private static class SupportEngineer extends AccessSample {
-        public void fillContacts() {
-            this.publicName = "Support"; // public
-            this.protectedNote = "Доступ к protected в наследнике";
-            this.city = "Москва"; // default доступен, так как класс в том же пакете
-            setPrivateToken("Только через сеттер"); // private скрыт, но методы доступны
-        }
-    }
-
-    // Демонстрация static: счётчик экземпляров и утилитарный класс
-    private static class StaticCounter {
+    private static class InstanceCounter {
         private static int createdCount;
 
         static {
-            createdCount = 0; // статический блок выполнится один раз
-            System.out.println("[StaticCounter] Загрузка класса, инициализируем счётчик");
+            createdCount = 0;
+            System.out.println("[InstanceCounter] class loaded: static init-блок выполнился один раз");
         }
 
-        public StaticCounter() {
+        public InstanceCounter() {
             createdCount++;
         }
 
@@ -146,8 +85,8 @@ public class _06_AccessStaticAnnotations {
         }
     }
 
-    private static final class MathHelper { // final класс: не даём наследовать
-        private MathHelper() {
+    private static final class MathUtil {
+        private MathUtil() {
         }
 
         public static int square(int value) {
@@ -155,59 +94,24 @@ public class _06_AccessStaticAnnotations {
         }
     }
 
-    // Константы принято объединять в классе со static final
-    private static final class Constants {
-        public static final double PI = 3.14159;
-        public static final int MAX_USERS = 1000;
+    private static class Parent {
+        public static String describe() {
+            return "Parent.static describe()";
+        }
 
-        private Constants() {
+        public String describeInstance() {
+            return "Parent.instance describeInstance()";
         }
     }
 
-    // final переменные и методы
-    private static class FinalExample {
-        private final String instanceId;
-
-        public FinalExample() {
-            this.instanceId = IdGenerator.nextId();
+    private static class Child extends Parent {
+        public static String describe() {
+            return "Child.static describe() (hiding, не override)";
         }
 
-        public void printConfig() {
-            System.out.println("Финальное поле instanceId неизменно: " + instanceId);
-            BasePaymentService paymentService = new CardPaymentService();
-            paymentService.describe(); // final метод из базового класса
-        }
-    }
-
-    private static class BasePaymentService {
-        public final void describe() {
-            System.out.println("BasePaymentService: этот метод final, переопределить нельзя");
-        }
-
-        public void pay(int amount) {
-            System.out.println("Оплата на сумму " + amount + " ₽");
-        }
-    }
-
-    private static class CardPaymentService extends BasePaymentService {
         @Override
-        public void pay(int amount) {
-            System.out.println("Оплата картой на сумму " + amount + " ₽");
-        }
-    }
-
-    // Демонстрация аннотаций
-    private static class AnnotationDemo {
-        public void safeCallDeprecated() {
-            // Локально скрываем предупреждение, чтобы показать вызов устаревшего метода
-            @SuppressWarnings("deprecation")
-            String message = deprecatedApi();
-            System.out.println(message);
-        }
-
-        @Deprecated
-        public String deprecatedApi() {
-            return "Этот метод помечен @Deprecated: в новом коде лучше избегать";
+        public String describeInstance() {
+            return "Child.instance describeInstance() (override)";
         }
     }
 
@@ -215,29 +119,12 @@ public class _06_AccessStaticAnnotations {
         private IdGenerator() {
         }
 
-        static String nextId() { // вложенные классы одного внешнего класса имеют доступ к членам друг друга
+        static String nextId() {
             return UUID.randomUUID().toString();
         }
     }
 
-    // Финальный класс: нельзя наследовать, полезно для неизменяемых объектов
-    private static final class ImmutableComponent {
-        private final String name;
-
-        private ImmutableComponent(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-    }
-
     public static void main(String[] args) {
-        demonstrateAccessModifiers();
-        demonstrateStaticMembers();
-        demonstrateFinalUsage();
-        demonstrateAnnotations();
-        summarizeTakeaways();
+        demonstrateStatic();
     }
 }
