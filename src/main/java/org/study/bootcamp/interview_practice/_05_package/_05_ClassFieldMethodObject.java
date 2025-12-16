@@ -47,21 +47,26 @@ java.util.ArrayList list = new java.util.ArrayList();  Без импорта (ч
 public class _05_ClassFieldMethodObject {
 
 /*
-    Класс имяОбъекта = new Класс();                                   Создание объекта через new (экземпляра класса)
-    имяОбъекта.метод();                                               Вызов метода объекта через точку (.)
+    Класс имяОбъекта = new Класс();                                   Создание объекта через new
+    имяОбъекта.метод();                                               Вызов метода объекта
  */
 
     private static void demonstrateClassAndObject() {
         System.out.println("1) Класс и объект");
 
-        // В круглых скобках конструктора указывают аргументы, если выбран конструктор с параметрами
-        Person person = new Person();
+        System.out.println("Класс Person — описание (поля + методы), объект person — конкретный экземпляр в памяти");
+        System.out.println("new Person() вызывает конструктор и создаёт объект, переменная person хранит его ссылку");
 
+        // В круглых скобках конструктора указывают аргументы, если выбран конструктор с параметрами
+        Person person = new Person(); // person — переменная-ссылка на объект Person
+
+        System.out.println("Вызов метода объекта через точку: person.introduce()");
         // В круглых скобках метода указывают аргументы, если метод объявлен с параметрами
         person.introduce();
 
         System.out.println();
     }
+
 
 /*
 Поле — это переменная, хранящая состояние объекта
@@ -132,7 +137,7 @@ public class _05_ClassFieldMethodObject {
             if (name == null || name.isBlank()) {
                 return "Здравствуйте!";
             }
-            return "Здравствуйте, " + name.trim() + " !";
+            return "Здравствуйте, " + name.trim() + "!";
         }
     }
 
@@ -204,9 +209,22 @@ this — ссылка на текущий объект, используется
     private static void demonstrateConstructorsAndThis() {
         System.out.println("2) Конструкторы и this");
 
+        System.out.println("Конструктор задаёт начальное состояние объекта при new");
+        System.out.println(
+                "Person(\"Анна\", 25) → выбран конструктор с параметрами;" +
+                " внутри используется this для обращения к полям/методам"
+        );
         Person anna = new Person("Анна", 25);
         anna.introduce();
+        System.out.println("calculateBirthYear(2025) возвращает int, поэтому результат можно вывести/сохранить");
         System.out.println("Год рождения Анны: " + anna.calculateBirthYear(2025));
+
+        System.out.println(
+                "Person() → выбран конструктор без параметров;" +
+                        " он делегирует инициализацию в Person(String name, int age) через this(\"Без имени\", 0)"
+        );
+        Person unknown = new Person();
+        unknown.introduce();
 
         System.out.println();
     }
@@ -216,7 +234,7 @@ this — ссылка на текущий объект, используется
 Параметры — переменные в объявлении метода
 Аргументы — значения, передаваемые при вызове метода
 
-    Метод без параметров и возврата — для выполнения действия, которое не требует входных данных и результата
+    Метод без параметра и возврата — для выполнения действия, которое не требует входных данных и результата
     модификаторДоступа void имяМетода() {                             Отсутствие параметра
                                      ;                                Действие
                        ;                                              void - метод не возвращает значение
@@ -283,10 +301,20 @@ this — ссылка на текущий объект, используется
     private static void demonstrateGettersSetters() {
         System.out.println("4) Геттеры и сеттеры");
 
+        System.out.println("Поля private: прямого доступа нет, состояние меняется через методы");
+        System.out.println(
+                "Сеттеры выполняют простую валидацию/нормализацию," +
+                " чтобы объект оставался в корректном состоянии"
+        );
+        System.out.println("Геттеры возвращают текущее значение поля");
+
         Person person = new Person("  ", -5);
+        System.out.println("После конструктора с некорректными значениями (\"  \", -5) сработали дефолты:");
         person.introduce();
+
         person.setName("Виктор");
         person.setAge(27);
+        System.out.println("После setName/setAge:");
         System.out.println(person.getName() + ", " + person.getAge() + " лет" + " (после обновления)");
 
         System.out.println();
