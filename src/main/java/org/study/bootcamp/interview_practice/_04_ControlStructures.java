@@ -52,7 +52,10 @@ public class _04_ControlStructures {
  */
 
     public void compareNumbers(int firstNumber, int secondNumber) {
-        System.out.printf("Сравнение %d и %d: ", firstNumber, secondNumber);
+        System.out.println("Сценарий: выбираем один из трёх путей (меньше / больше / равно) по результату сравнения");
+        System.out.printf("Входные значения: firstNumber=%d, secondNumber=%d%n", firstNumber, secondNumber);
+
+        System.out.printf("Результат сравнения: ");
         if (firstNumber < secondNumber) {
             System.out.printf("%d < %d (первое число меньше)%n", firstNumber, secondNumber);
         } else if (firstNumber > secondNumber) {
@@ -60,6 +63,8 @@ public class _04_ControlStructures {
         } else {
             System.out.printf("%d == %d (числа равны)%n", firstNumber, secondNumber);
         }
+
+        System.out.println();
     }
 
 /*
@@ -100,7 +105,10 @@ public class _04_ControlStructures {
 */
 
     public void printDayOfWeek(int dayNumber) {
-        System.out.printf("День недели №%d: ", dayNumber);
+        System.out.println("Сценарий: по номеру дня выбираем один вариант из фиксированного набора через switch");
+        System.out.printf("Входное значение: dayNumber=%d%n", dayNumber);
+        System.out.print("Результат: ");
+
         switch (dayNumber) {
             case 1:
                 System.out.println("понедельник (рабочий день)");
@@ -124,18 +132,25 @@ public class _04_ControlStructures {
                 System.out.println("воскресенье (выходной)");
                 break;
             default:
-                System.out.println("неверный номер дня");
+                System.out.println("неверный номер дня (ожидается 1..7)");
                 break;
         }
+
+        System.out.println();
     }
 
     public void printDayType(int dayNumber) {
-        System.out.printf("Тип дня №%d: ", dayNumber);
+        System.out.println("Сценарий: определяем тип дня (рабочий/выходной) через switch со стрелочным синтаксисом");
+        System.out.printf("Входное значение: dayNumber=%d%n", dayNumber);
+        System.out.print("Результат: ");
+
         switch (dayNumber) {
             case 1, 2, 3, 4, 5 -> System.out.println("рабочий день");
             case 6, 7 -> System.out.println("выходной день");
-            default -> System.out.println("не определён");
+            default -> System.out.println("не определён (ожидается 1..7)");
         }
+
+        System.out.println();
     }
 
 /*
@@ -174,15 +189,24 @@ public class _04_ControlStructures {
  */
 
     public void countdown(int seconds) {
-        System.out.println("Обратный отсчёт:");
+        System.out.println("Сценарий: while выполняется, пока условие (seconds > 0) истинно; может выполниться 0 раз");
+        System.out.printf("Начальное значение: seconds=%d%n", seconds);
+        System.out.println("Ход выполнения:");
+
         while (seconds > 0) {
             System.out.printf("%d...%n", seconds);
             seconds--;
         }
         System.out.println("Старт");
+
+        System.out.println();
     }
 
     public void outputFromStartToLimit(int start, int limit) {
+        System.out.println("Сценарий: do-while выполняет тело минимум один раз, затем проверяет (value <= limit)");
+        System.out.printf("Входные значения: start=%d, limit=%d%n", start, limit);
+        System.out.println("Ход выполнения:");
+
         System.out.printf("Последовательность от %d до %d:%n", start, limit);
         int value = start;
         do {
@@ -190,6 +214,10 @@ public class _04_ControlStructures {
                     value, limit, limit - value);
             value++;
         } while (value <= limit);
+
+        System.out.println("Завершение: условие value <= limit стало false");
+
+        System.out.println();
     }
 
 /*
@@ -226,19 +254,30 @@ public class _04_ControlStructures {
  */
 
     public void printEvenNumbersInRange(int start, int end) {
+        System.out.println("Сценарий: for перебирает диапазон; if внутри цикла отбирает только чётные значения");
+        System.out.printf("Входные значения: start=%d, end=%d%n", start, end);
         System.out.printf("Чётные числа в диапазоне [%d, %d]:%n", start, end);
-        for (int i = start; i <= end; i++) {
-            if (i % 2 == 0) {
-                System.out.printf("(%d) ", i);
+
+        int evenCount = 0;
+        for (int value = start; value <= end; value++) {
+            if (value % 2 == 0) {
+                System.out.printf("(%d) ", value);
+                evenCount++;
             }
         }
-        System.out.printf(
-                "%nВсего чётных чисел: %d%n",
-                (end - start + 1) / 2 + ((start % 2 == 0 && end % 2 == 0) ? 1 : 0)
-        );
+        System.out.printf("%nВсего чётных чисел: %d%n", evenCount);
+
+        System.out.println();
     }
 
+
     public void printArrayElements(String[] array) {
+        System.out.println(
+                "Сценарий: for-each обходит элементы массива без доступа к индексу;" +
+                " элемент читается как копия ссылки"
+        );
+        System.out.printf("Размер массива: %d%n", array.length);
+
         System.out.printf("Элементы массива (%d шт.):%n", array.length);
         int index = 1;
         for (String element : array) {
@@ -247,6 +286,8 @@ public class _04_ControlStructures {
                     index++, array.length, element, element.length()
             );
         }
+
+        System.out.println();
     }
 
 /*
@@ -261,19 +302,27 @@ public class _04_ControlStructures {
  */
 
     public void demonstrateBreak() {
+        System.out.println("Сценарий: break немедленно завершает цикл, даже если условие цикла ещё истинно");
         System.out.println("break — выход при достижении 5:");
+        System.out.print("Ход выполнения: ");
+
         for (int i = 1; i <= 10; i++) {
             if (i == 5) {
-                System.out.println("\nДостигли 5, выходим из цикла");
+                System.out.println("\nДостигли i=5, выполняем break и выходим из цикла");
                 break;
             }
             System.out.print(i + " ");
         }
+        System.out.println("Завершение: управление перешло на строку после цикла");
+
         System.out.println();
     }
 
     public void demonstrateContinue() {
+        System.out.println("Сценарий: continue пропускает текущую итерацию и переходит к следующей");
         System.out.println("continue — пропуск чётных чисел:");
+        System.out.print("Ход выполнения (печатаем только нечётные): ");
+
         for (int i = 1; i <= 10; i++) {
             if (i % 2 == 0) {
                 continue;
@@ -281,10 +330,18 @@ public class _04_ControlStructures {
             System.out.print(i + " ");
         }
         System.out.println();
+        System.out.println("Завершение: цикл отработал все итерации, но часть из них была пропущена через continue");
+
+        System.out.println();
     }
 
     public void demonstrateLabels() {
+        System.out.println(
+                "Сценарий: метка позволяет выйти сразу из внешнего цикла," +
+                        " когда условие выполнено во внутреннем цикле"
+        );
         System.out.println("Метки — выход из вложенных циклов:");
+
         outerLoop:
         for (int row = 1; row <= 3; row++) {
             System.out.println("Строка " + row);
@@ -293,53 +350,63 @@ public class _04_ControlStructures {
                 System.out.println("Колонка " + col);
 
                 if (row == 2 && col == 2) {
-                    System.out.println("break outerLoop → Выход из обоих циклов");
+                    System.out.println("break outerLoop → Выход из обоих циклов (внешний цикл завершён)");
                     break outerLoop;
                 }
             }
         }
         System.out.println("Выполнение продолжилось после циклов");
+
+        System.out.println();
     }
 
     public static void main(String[] args) {
 
         _04_ControlStructures ifDemoV1 = new _04_ControlStructures();
         System.out.println(" === if + else if + else ===");
+        System.out.println("Демонстрация: одно условие → один из вариантов выполнения");
         ifDemoV1.compareNumbers(1, 2);
         ifDemoV1.compareNumbers(4, 3);
         ifDemoV1.compareNumbers(5, 5);
 
         _04_ControlStructures switchDemoV1 = new _04_ControlStructures();
         System.out.println("\n === switch + case (break) ===");
+        System.out.println("Демонстрация: точное совпадение значения с case; break предотвращает fall-through");
         switchDemoV1.printDayOfWeek(1);
         switchDemoV1.printDayOfWeek(6);
         switchDemoV1.printDayOfWeek(9);
 
         _04_ControlStructures switchDemoV2 = new _04_ControlStructures();
         System.out.println("\n === switch + case (->) ===");
+        System.out.println("Демонстрация: стрелочный switch (->) без break; несколько case значений через запятую");
         switchDemoV2.printDayType(1);
         switchDemoV2.printDayType(6);
         switchDemoV2.printDayType(9);
 
         _04_ControlStructures whileDemoV1 = new _04_ControlStructures();
         System.out.println("\n === while ===");
+        System.out.println("Демонстрация: цикл с предусловием; тело выполняется только при истинном условии");
         whileDemoV1.countdown(3);
 
         _04_ControlStructures doWhileDemoV1 = new _04_ControlStructures();
         System.out.println("\n === do-while ===");
+        System.out.println("Демонстрация: цикл с постусловием; тело выполняется минимум один раз");
         doWhileDemoV1.outputFromStartToLimit(3, 7);
 
         _04_ControlStructures forV1 = new _04_ControlStructures();
         System.out.println("\n === for ===");
+        System.out.println("Демонстрация: перебор диапазона со счётчиком; фильтрация значений через if");
         forV1.printEvenNumbersInRange(1, 10);
 
         _04_ControlStructures forEachV1 = new _04_ControlStructures();
         System.out.println("\n === for + each ===");
+        System.out.println("Демонстрация: перебор массива без индекса (for-each)");
         String[] fruits = {"Яблоко", "Банан", "Апельсин"};
         forEachV1.printArrayElements(fruits);
 
         _04_ControlStructures serviceOperatorsV1 = new _04_ControlStructures();
         System.out.println("\n === Служебные операторы циклов ===");
+        System.out.println("Демонстрация: break/continue/labels меняют стандартный ход выполнения цикла");
         serviceOperatorsV1.demonstrateBreak();
         serviceOperatorsV1.demonstrateContinue();
         serviceOperatorsV1.demonstrateLabels();
