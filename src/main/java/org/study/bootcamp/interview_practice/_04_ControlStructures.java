@@ -102,6 +102,17 @@ public class _04_ControlStructures {
     • Не требует логических выражений                    (boolean)
     • Поддерживает выражения со стрелкой (->) без break  (Java 12+)
     • Можно группировать case значения через запятую (,) (Java 14+)
+
+
+    2.2. switch как expression (Java 14+): возвращает значение
+    - можно присваивать результат switch в переменную
+    - в ветках используется -> или yield (для блоков)
+    Пример:
+    String dayType = switch (dayNumber) {
+    case 1, 2, 3, 4, 5 -> "рабочий";
+    case 6, 7 -> "выходной";
+    default -> "не определён";
+    };
 */
 
     public void printDayOfWeek(int dayNumber) {
