@@ -1,7 +1,10 @@
 package org.study.bootcamp.interview_practice;
 
+import java.util.Scanner;
+
 /**
- * КЛАСС ДЛЯ ДЕМОНСТРАЦИИ ОСНОВНЫХ СИМВОЛОВ И ОПЕРАТОРОВ JAVA
+ * КЛАСС ДЛЯ ДЕМОНСТРАЦИИ ОСНОВНЫХ СИМВОЛОВ И ОПЕРАТОРОВ JAVA,
+ * А ТАКЖЕ РАБОТЫ С КОНСОЛЬЮ
  *
  * Символы — это отдельные знаки, которые используются в языке Java для
  * структурирования кода, указания операций и разделения элементов
@@ -236,4 +239,56 @@ int value2 = (1 + 2) * 3;     // (1 + 2) * 3 = 9
 - для безопасности (не получить NullPointerException)
 - для производительности (не выполнять дорогую проверку без необходимости)
  */
+
+// === ВЫВОД В КОНСОЛЬ ===
+// Зачем нужен: увидеть значения, отследить ход выполнения
+// В учебных примерах это "наблюдатель" состояния программы
+
+private static void demonstrateConsoleOutput() {
+    System.out.println("11. Вывод в консоль: наблюдаем выполнение программы");
+
+    System.out.println("A) println печатает строку и переносит курсор на новую строку");
+    System.out.print("B) print печатает без переноса; ");
+    System.out.print("следующий print продолжит в той же строке");
+    System.out.println();
+
+    int age = 77;
+
+    System.out.println();
+}
+
+    // === ВВОД ИЗ КОНСОЛИ (Scanner) ===
+    // Важно: Scanner читает из System.in (поток ввода)
+    // Для учебного примера Scanner можно не закрывать, чтобы не закрыть System.in для всего процесса
+
+    private static void demonstrateScannerBasics() {
+        System.out.println("12. Ввод из консоли: Scanner читает данные пользователя");
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("A) nextLine() читает строку целиком (до Enter)");
+        System.out.print("Введите имя: ");
+        String name = scanner.nextLine();
+        System.out.println("Вы ввели: name=\"" + name + "\"");
+
+        System.out.println();
+        System.out.println("B) nextInt() читает число, но НЕ забирает перевод строки");
+        System.out.print("Введите возраст (целое число): ");
+        int inputAge = scanner.nextInt();
+
+        System.out.println("Сразу после nextInt() в буфере остаётся '\\n'" +
+                " — если дальше нужен nextLine(), его надо 'съесть'");
+        scanner.nextLine(); // съедаем оставшийся перевод строки
+
+        System.out.print("Введите город: ");
+        String city = scanner.nextLine();
+
+        System.out.println("Результат ввода: age=" + inputAge + ", city=\"" + city + "\"");
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        demonstrateConsoleOutput();
+        demonstrateScannerBasics();
+    }
 }
