@@ -44,7 +44,7 @@ java.util.ArrayList list = new java.util.ArrayList();  Без импорта (ч
  *
  * @author Sergey
  */
-public class _05_ClassFieldMethodObject {
+public class _05_0_ClassFieldMethodObject {
 
 /*
     Класс имяОбъекта = new Класс();                                   Создание объекта через new
