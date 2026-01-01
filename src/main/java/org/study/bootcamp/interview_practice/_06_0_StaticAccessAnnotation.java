@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
  *
  * @author Sergey
  */
-public class _06_StaticAccessAnnotation {
+public class _06_0_StaticAccessAnnotation {
 
 /*
     static — ключевое слово, которое делает член (поле/метод/блок/вложенный класс) принадлежащим классу, а не объекту;
