@@ -9,7 +9,7 @@
 8) Многопоточность: Parallelism, Thread | - |
 9) Многопоточность: synchronized, wait/notify | - |
 10) Многопоточность: Асинхронность, Future, CompletableFuture | - |
-11) ...
+11) Многопоточность: Volatile, Неизменяемые классы, Deadlock, пакет Concurrency
 
 12) Что такое Spring и почему мы используем его в проекте | 2 видео: 17:45 | 4 видео: всё |
 13) Inversion of control | 1 видео: всё |
