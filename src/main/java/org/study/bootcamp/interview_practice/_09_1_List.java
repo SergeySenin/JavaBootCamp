@@ -48,8 +48,8 @@ package org.study.bootcamp.interview_practice;
  */
 public class _09_1_List {
 
-    // O(1) — константно                    | O(n) — линейно
-    // ≈ “один шаг”; размер почти не влияет | ≈ “пройтись по всем”; рост прямо пропорционален
+// O(1) — константно                    | O(n) — линейно
+// ≈ “один шаг”; размер почти не влияет | ≈ “пройтись по всем”; рост прямо пропорционален
 
     /**
      *  | -------------------------- | ---------------------------------------------------------------------------------
@@ -141,10 +141,10 @@ public class _09_1_List {
         java.util.List<String> arrayListTags = new java.util.ArrayList<>();
         java.util.List<String> linkedListTags = new java.util.LinkedList<>();
 
-        System.out.println("   Создан ArrayList:  " + arrayListTags + ", size=" + arrayListTags.size()
-                + ", isEmpty=" + arrayListTags.isEmpty());
-        System.out.println("   Создан LinkedList: " + linkedListTags + ", size=" + linkedListTags.size()
-                + ", isEmpty=" + linkedListTags.isEmpty());
+        System.out.println("   Создан ArrayList:  "
+                + arrayListTags  + ", size=" + arrayListTags.size() + ", isEmpty=" + arrayListTags.isEmpty());
+        System.out.println("   Создан LinkedList: "
+                + linkedListTags + ", size=" + linkedListTags.size() + ", isEmpty=" + linkedListTags.isEmpty());
 
         arrayListTags.add("первый");
         arrayListTags.add("второй");
@@ -152,7 +152,7 @@ public class _09_1_List {
         linkedListTags.add("второй");
 
         System.out.println("   После add двух элементов:");
-        System.out.println("   - ArrayList:  " + arrayListTags + ", size=" + arrayListTags.size());
+        System.out.println("   - ArrayList:  " + arrayListTags  + ", size=" + arrayListTags.size());
         System.out.println("   - LinkedList: " + linkedListTags + ", size=" + linkedListTags.size());
 
         System.out.println("   Примечание: методы getFirst()/getLast() существуют у Deque/LinkedList, но не у List.");
@@ -273,8 +273,8 @@ public class _09_1_List {
 
         targetList.clear();
         System.out.println(
-                "   clear()                            -> список=" + targetList
-                        + ", size=" + targetList.size() + ", isEmpty=" + targetList.isEmpty()
+                "   clear()                            -> список="
+                        + targetList + ", size=" + targetList.size() + ", isEmpty=" + targetList.isEmpty()
         );
 
         System.out.println();
@@ -342,12 +342,12 @@ public class _09_1_List {
         System.out.println("   Исходный список: " + source);
 
         Object[] asObjectArray = source.toArray();
-        System.out.println("   toArray()                            -> Object[], длина=" + asObjectArray.length
-                + ", первый=\"" + asObjectArray[0] + "\"");
+        System.out.println("   toArray()                            -> Object[], длина="
+                + asObjectArray.length + ", первый=\"" + asObjectArray[0] + "\"");
 
         String[] asStringArray = source.toArray(new String[0]);
-        System.out.println("   toArray(new String[0])               -> String[], длина=" + asStringArray.length
-                + ", последний=\"" + asStringArray[asStringArray.length - 1] + "\"");
+        System.out.println("   toArray(new String[0])               -> String[], длина="
+                + asStringArray.length + ", последний=\"" + asStringArray[asStringArray.length - 1] + "\"");
 
         java.util.List<String> copy = new java.util.ArrayList<>(source);
         System.out.println("   Копирование: new ArrayList<>(source) -> " + copy);
@@ -385,12 +385,12 @@ public class _09_1_List {
 
         view.set(0, "второй-обновлено");
         System.out.println("   view.set(0, \"второй-обновлено\") выполнен");
-        System.out.println("   - представление: " + view);
+        System.out.println("   - представление: "  + view);
         System.out.println("   - исходныйСписок: " + original + " (изменение видно в исходном списке)");
 
         view.remove(1);
         System.out.println("   view.remove(index=1) выполнен");
-        System.out.println("   - представление: " + view);
+        System.out.println("   - представление: "  + view);
         System.out.println("   - исходныйСписок: " + original + " (структурное удаление также отразилось)");
 
         try {

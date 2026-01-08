@@ -3,42 +3,39 @@ package org.study.bootcamp.interview_practice;
 /**
  * КЛАСС ДЛЯ ДЕМОНСТРАЦИИ КОЛЛЕКЦИИ Set ИЗ JAVA И ЕЁ ОСОБЕННОСТЕЙ
  *
- * Set — это «множество»: коллекция уникальных элементов (без дубликатов).
- * В отличие от List:
- * - нет индексов и методов get(index)/set(index,...);
- * - add(value) возвращает false, если элемент уже был (дубликат не добавляется);
- * - equals для Set не зависит от порядка, важен только состав элементов.
+ * Set — это «множество»: коллекция уникальных элементов. Порядок элементов зависит от реализации.
+ * equals для Set не зависит от порядка: важен только состав элементов.
  *
  * Примеры из “соцсети / банк”:
- * - HashSet:
+ * - HashSet (Хэш-множество):
  *   - проверка “уже лайкнул?” (быстрое contains по userId);
  *   - набор уникальных категорий/тегов (чтобы не было повторов).
- * - LinkedHashSet:
+ * - LinkedHashSet (Хэш-множество с порядком вставки):
  *   - уникальные элементы + нужен порядок вставки (например, “история последних уникальных запросов”).
- * - TreeSet:
+ * - TreeSet (Множество на дереве поиска):
  *   - уникальные элементы + нужен отсортированный порядок и диапазоны
  *     (например, уникальные суммы/даты с быстрым получением ближайших значений).
  *
  * | -------------------------- | --------------------------------------------------------------------------------------
- * | Критерий                   | HashSet
+ * | Критерий                   | HashSet (Хэш-множество)
  * | -------------------------- | --------------------------------------------------------------------------------------
- * | Порядок элементов          | Не гарантируется
+ * | Порядок элементов          | Не гарантируется (может меняться)
  * | -------------------------- | --------------------------------------------------------------------------------------
- * | Дубликаты                  | Запрещены (второй add вернёт false)
+ * | Дубликаты                  | Запрещены (уникальность по equals/hashCode)
  * | -------------------------- | --------------------------------------------------------------------------------------
  * | Допустимость null          | Допускается (не более одного null)
  * | -------------------------- | --------------------------------------------------------------------------------------
  * | Потокобезопасность         | Нет (не синхронизирован)
  * | -------------------------- | --------------------------------------------------------------------------------------
- * | Внутренняя структура       | Хеш-таблица (ключ — элемент; уникальность через equals/hashCode)
+ * | Внутренняя структура       | Хэш-таблица (ключ — элемент; уникальность через equals/hashCode)
  * | -------------------------- | --------------------------------------------------------------------------------------
  *
  * | -------------------------- | --------------------------------------------------------------------------------------
- * | Критерий                   | LinkedHashSet
+ * | Критерий                   | LinkedHashSet (Хэш-множество с порядком вставки)
  * | -------------------------- | --------------------------------------------------------------------------------------
  * | Порядок элементов          | Сохраняется (порядок вставки)
  * | -------------------------- | --------------------------------------------------------------------------------------
- * | Дубликаты                  | Запрещены (второй add вернёт false)
+ * | Дубликаты                  | Запрещены (уникальность по equals/hashCode)
  * | -------------------------- | --------------------------------------------------------------------------------------
  * | Допустимость null          | Допускается (не более одного null)
  * | -------------------------- | --------------------------------------------------------------------------------------
@@ -48,11 +45,11 @@ package org.study.bootcamp.interview_practice;
  * | -------------------------- | --------------------------------------------------------------------------------------
  *
  * | -------------------------- | --------------------------------------------------------------------------------------
- * | Критерий                   | TreeSet
+ * | Критерий                   | TreeSet (Множество на дереве поиска)
  * | -------------------------- | --------------------------------------------------------------------------------------
  * | Порядок элементов          | Отсортирован (natural order или Comparator)
  * | -------------------------- | --------------------------------------------------------------------------------------
- * | Дубликаты                  | Запрещены (уникальность по сравнению/Comparator)
+ * | Дубликаты                  | Запрещены (уникальность по сравнению: compareTo/Comparator)
  * | -------------------------- | --------------------------------------------------------------------------------------
  * | Допустимость null          | Обычно не допускается (для natural order будет NPE при add(null))
  * | -------------------------- | --------------------------------------------------------------------------------------
@@ -65,12 +62,12 @@ package org.study.bootcamp.interview_practice;
  */
 public class _09_2_Set {
 
-    // O(1) — константно                    | O(n) — линейно              | O(log n) — логарифмически
-    // ≈ “один шаг”; размер почти не влияет | ≈ “пройтись по всем”        | ≈ “дерево”; рост медленный
+// O(1) — константно                    | O(n) — линейно                                  | O(log n) — логарифмически
+// ≈ “один шаг”; размер почти не влияет | ≈ “пройтись по всем”; рост прямо пропорционален | ≈ “дерево”; рост медленный
 
     /**
      *  | -------------------------- | ---------------------------------------------------------------------------------
-     *  | Скорость основных операций | HashSet / LinkedHashSet
+     *  | Скорость основных операций | HashSet
      *  | -------------------------- | ---------------------------------------------------------------------------------
      *  | add(value)                 | в среднем O(1) (быстро); зависит от качества hashCode и количества коллизий
      *  | -------------------------- | ---------------------------------------------------------------------------------
@@ -78,15 +75,36 @@ public class _09_2_Set {
      *  | -------------------------- | ---------------------------------------------------------------------------------
      *  | contains(value)            | в среднем O(1) (быстро)
      *  | -------------------------- | ---------------------------------------------------------------------------------
-     *  | Итерация for-each          | O(n) (линейно) — но порядок в HashSet не гарантируется
+     *  | Итерация for-each          | O(n) (средне) — порядок не гарантируется
      *  | -------------------------- | ---------------------------------------------------------------------------------
      *
      *  | -------------------------- | ---------------------------------------------------------------------------------
-     *  | Преимущества               | 1) Быстрые операции membership (contains/add/remove) в среднем.
-     *  |                            | 2) Естественное хранение “уникального набора”.
+     *  | Преимущества               | 1) Быстрая проверка наличия элемента (contains) и операции add/remove в среднем.
+     *  |                            | 2) Естественный выбор для “набора уникальных элементов”, когда порядок не важен.
      *  | -------------------------- | ---------------------------------------------------------------------------------
-     *  | Недостатки                 | 1) Для “своих” объектов критичны корректные equals/hashCode.
-     *  |                            | 2) HashSet не гарантирует порядок.
+     *  | Недостатки                 | 1) Для своих объектов критичны корректные equals/hashCode.
+     *  |                            | 2) Порядок не гарантируется.
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     */
+
+    /**
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | Скорость основных операций | LinkedHashSet
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | add(value)                 | в среднем O(1) (быстро); обычно чуть медленнее HashSet из-за поддержки порядка
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | remove(value)              | в среднем O(1) (быстро); обычно чуть медленнее HashSet
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | contains(value)            | в среднем O(1) (быстро); обычно чуть медленнее HashSet
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | Итерация for-each          | O(n) (средне) — в порядке вставки
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | Преимущества               | 1) Уникальность как у HashSet + предсказуемый порядок вставки.
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | Недостатки                 | 1) Чуть больше накладных расходов по памяти и времени (хранится порядок).
+     *  |                            | 2) Для своих объектов критичны корректные equals/hashCode.
      *  | -------------------------- | ---------------------------------------------------------------------------------
      */
 
@@ -94,42 +112,53 @@ public class _09_2_Set {
      *  | -------------------------- | ---------------------------------------------------------------------------------
      *  | Скорость основных операций | TreeSet
      *  | -------------------------- | ---------------------------------------------------------------------------------
-     *  | add(value)                 | O(log n) (стабильно)
+     *  | add(value)                 | O(log n) (средне) — поддерживается сортировка
      *  | -------------------------- | ---------------------------------------------------------------------------------
-     *  | remove(value)              | O(log n)
+     *  | remove(value)              | O(log n) (средне)
      *  | -------------------------- | ---------------------------------------------------------------------------------
-     *  | contains(value)            | O(log n)
+     *  | contains(value)            | O(log n) (средне)
      *  | -------------------------- | ---------------------------------------------------------------------------------
-     *  | Итерация for-each          | O(n) (линейно) — в отсортированном порядке
+     *  | Итерация for-each          | O(n) (средне) — в отсортированном порядке
      *  | -------------------------- | ---------------------------------------------------------------------------------
      *
      *  | -------------------------- | ---------------------------------------------------------------------------------
      *  | Преимущества               | 1) Всегда отсортированный порядок.
-     *  |                            | 2) Навигация и диапазоны: first/last/higher/lower/subSet/headSet/tailSet.
+     *  |                            | 2) Удобны “диапазоны”, навигация: first/last/lower/higher/subSet/headSet/tailSet.
      *  | -------------------------- | ---------------------------------------------------------------------------------
-     *  | Недостатки                 | 1) Медленнее HashSet на больших объёмах, если нужна только membership.
+     *  | Недостатки                 | 1) Когда нужна проверка наличия (contains), обычно медленнее HashSet на объёмах.
      *  |                            | 2) Требует корректного сравнения (Comparable/Comparator).
      *  | -------------------------- | ---------------------------------------------------------------------------------
      */
 
     /*
-        1) HashSet
+        1) HashSet (хэш-множество)
         Создание пустого множества:
-        java.util.Set<Тип> имяНабора = new java.util.HashSet<>();
+        java.util.Set<Тип> имяМножества = new java.util.HashSet<>();
 
         Создание из другой коллекции (копирование элементов):
-        java.util.Set<Тип> имяНабора = new java.util.HashSet<>(java.util.List.of(элемент1, элемент2, ...));
+        java.util.Set<Тип> имяМножества = new java.util.HashSet<>(java.util.List.of(элемент1, элемент2, ...));
 
-        2) LinkedHashSet (сохранение порядка вставки):
-        java.util.Set<Тип> имяНабора = new java.util.LinkedHashSet<>();
+        2) LinkedHashSet (хэш-множество с порядком вставки)
+        java.util.Set<Тип> имяМножества = new java.util.LinkedHashSet<>();
 
-        3) TreeSet (отсортированное множество):
-        java.util.Set<Тип> имяНабора = new java.util.TreeSet<>(); // элементы должны быть Comparable
-        java.util.Set<Тип> имяНабора = new java.util.TreeSet<>(comparator); // порядок через Comparator
+        Создание из другой коллекции (копирование элементов + сохранение порядка итерации, как в источнике):
+        java.util.Set<Тип> имяМножества = new java.util.LinkedHashSet<>(sourceCollection);
+
+        3) TreeSet (множество на дереве поиска; отсортированное)
+        java.util.Set<Тип> имяМножества = new java.util.TreeSet<>();                 // элементы должны быть Comparable
+        java.util.Set<Тип> имяМножества = new java.util.TreeSet<>(comparator);       // порядок через Comparator
+        java.util.Set<Тип> имяМножества = new java.util.TreeSet<>(sourceCollection); // копирование + сортировка
+
+        4) Неизменяемые множества (immutable)
+        java.util.Set<Тип> readOnly = java.util.Set.of(элемент1, элемент2, ...);  // null запрещён, дубликаты запрещены
+        java.util.Set<Тип> readOnlyCopy = java.util.Set.copyOf(sourceCollection); // null запрещён
+
+        5) “Только чтение” как представление (view)
+        java.util.Set<Тип> view = java.util.Collections.unmodifiableSet(mutableSet); // запрет модификаций через view
      */
 
     // =================================================================================================================
-    // 1) Создание и базовые свойства: size / isEmpty / уникальность / порядок (HashSet vs LinkedHashSet vs TreeSet)
+    // 1) Создание и базовые свойства: size / isEmpty / уникальность / порядок
     // =================================================================================================================
     private static void demonstrateCreationAndBasicProperties() {
         System.out.println("1) Создание Set и базовые свойства (size / isEmpty / уникальность / порядок)");
@@ -138,18 +167,19 @@ public class _09_2_Set {
         java.util.Set<String> linkedHashSetTags = new java.util.LinkedHashSet<>();
         java.util.Set<String> treeSetTags = new java.util.TreeSet<>();
 
-        System.out.println("   Создан HashSet:       " + hashSetTags + ", size=" + hashSetTags.size()
-                + ", isEmpty=" + hashSetTags.isEmpty());
-        System.out.println("   Создан LinkedHashSet: " + linkedHashSetTags + ", size=" + linkedHashSetTags.size()
-                + ", isEmpty=" + linkedHashSetTags.isEmpty());
-        System.out.println("   Создан TreeSet:       " + treeSetTags + ", size=" + treeSetTags.size()
-                + ", isEmpty=" + treeSetTags.isEmpty());
+        System.out.println("   Создан HashSet:       " + hashSetTags
+                + ", size=" + hashSetTags.size()       + ", isEmpty=" + hashSetTags.isEmpty());
+        System.out.println("   Создан LinkedHashSet: " + linkedHashSetTags
+                + ", size=" + linkedHashSetTags.size() + ", isEmpty=" + linkedHashSetTags.isEmpty());
+        System.out.println("   Создан TreeSet:       " + treeSetTags
+                + ", size=" + treeSetTags.size()       + ", isEmpty=" + treeSetTags.isEmpty());
 
         boolean isFirstAddedToHashSet = hashSetTags.add("первый");
         boolean isDuplicateAddedToHashSet = hashSetTags.add("первый");
-        System.out.println("   HashSet.add(\"первый\") -> " + isFirstAddedToHashSet + ", состояние=" + hashSetTags);
-        System.out.println("   HashSet.add(\"первый\") (дубликат) -> " + isDuplicateAddedToHashSet
-                + ", состояние=" + hashSetTags + " (размер не изменился)");
+        System.out.println("   HashSet.add(\"первый\")            -> "
+                + isFirstAddedToHashSet + ", состояние=" + hashSetTags);
+        System.out.println("   HashSet.add(\"первый\") (дубликат) -> "
+                + isDuplicateAddedToHashSet + ", состояние=" + hashSetTags + " (размер не изменился)");
 
         linkedHashSetTags.add("третий");
         linkedHashSetTags.add("первый");
@@ -163,15 +193,15 @@ public class _09_2_Set {
         treeSetTags.add("второй");
 
         System.out.println("   Порядок (может отличаться):");
-        System.out.println("   - HashSet:       " + hashSetTags + " (порядок не гарантируется)");
+        System.out.println("   - HashSet:       " + hashSetTags       + " (порядок не гарантируется)");
         System.out.println("   - LinkedHashSet: " + linkedHashSetTags + " (порядок вставки)");
-        System.out.println("   - TreeSet:       " + treeSetTags + " (отсортированный порядок)");
+        System.out.println("   - TreeSet:       " + treeSetTags       + " (отсортированный порядок)");
 
         System.out.println();
     }
 
     // =================================================================================================================
-    // 2) Добавление: add / addAll (без индексов; признак изменения)
+    // 2) Добавление: add / addAll (без индексов; add возвращает признак изменения)
     // =================================================================================================================
     private static void demonstrateAddOperations(java.util.Set<String> targetSet, String setName) {
         System.out.println("2) Добавление элементов (" + setName + "): add / addAll");
@@ -179,24 +209,27 @@ public class _09_2_Set {
         System.out.println("   Исходное множество: " + targetSet);
 
         boolean isSecondAdded = targetSet.add("второй");
-        System.out.println("   add(\"второй\")               -> изменено=" + isSecondAdded + ", состояние=" + targetSet);
+        System.out.println("   add(\"второй\")                           -> изменено="
+                + isSecondAdded + ", состояние=" + targetSet);
 
         boolean isFirstAdded = targetSet.add("первый");
-        System.out.println("   add(\"первый\")               -> изменено=" + isFirstAdded + ", состояние=" + targetSet);
+        System.out.println("   add(\"первый\")                           -> изменено="
+                + isFirstAdded + ", состояние=" + targetSet);
 
         boolean isDuplicateAdded = targetSet.add("первый");
-        System.out.println("   add(\"первый\") (дубликат)    -> изменено=" + isDuplicateAdded + ", состояние=" + targetSet);
+        System.out.println("   add(\"первый\") (дубликат)                -> изменено="
+                + isDuplicateAdded + ", состояние=" + targetSet);
 
         java.util.List<String> batch = java.util.List.of("третий", "четвертый", "второй");
         boolean isBatchAdded = targetSet.addAll(batch);
-        System.out.println("   addAll([\"третий\",\"четвертый\",\"второй\"]) -> изменено=" + isBatchAdded
-                + ", состояние=" + targetSet + " (\"второй\" уже мог быть)");
+        System.out.println("   addAll([\"третий\",\"четвертый\",\"второй\"]) -> изменено="
+                + isBatchAdded + ", состояние=" + targetSet + " (\"второй\" уже мог быть)");
 
         System.out.println();
     }
 
     // =================================================================================================================
-    // 3) Поиск: contains / containsAll (equals + hashCode критичны для hash-based реализаций)
+    // 3) Поиск: contains / containsAll (важна корректность equals; для hash-based также hashCode)
     // =================================================================================================================
     private static void demonstrateContainsOperations(java.util.Set<String> targetSet, String setName) {
         System.out.println("3) Поиск (" + setName + "): contains / containsAll");
@@ -204,21 +237,24 @@ public class _09_2_Set {
         System.out.println("   Текущее множество: " + targetSet);
 
         boolean isContainsSecond = targetSet.contains("второй");
-        boolean isContainsMissing = targetSet.contains("не-существует");
+        System.out.println("   contains(\"второй\")               -> " + isContainsSecond);
 
-        System.out.println("   contains(\"второй\")       -> " + isContainsSecond);
-        System.out.println("   contains(\"не-существует\") -> " + isContainsMissing);
+        boolean isContainsNotExisting = targetSet.contains("не-существует");
+        System.out.println("   contains(\"не-существует\")        -> " + isContainsNotExisting);
 
-        java.util.List<String> required = java.util.List.of("второй", "четвертый");
-        boolean isContainsAll = targetSet.containsAll(required);
-        System.out.println("   containsAll([\"второй\", \"четвертый\"]) -> " + isContainsAll);
+        java.util.Set<String> required = java.util.Set.of("первый", "второй");
+        boolean isContainsAllRequired = targetSet.containsAll(required);
+        System.out.println("   containsAll([\"первый\",\"второй\"]) -> " + isContainsAllRequired);
 
-        System.out.println("   Примечание: для HashSet/LinkedHashSet contains использует hashCode+equals.");
+        System.out.println("   Примечание: contains/containsAll используют equals().");
+        System.out.println("   Для HashSet/LinkedHashSet дополнительно критичен hashCode().");
+        System.out.println("   Для TreeSet уникальность/поиск опираются на сравнение (Comparable/Comparator).");
+
         System.out.println();
     }
 
     // =================================================================================================================
-    // 4) Удаление: remove(value) / removeAll / retainAll / clear / removeIf
+    // 4) Удаление: remove / removeAll / retainAll / clear / removeIf
     // =================================================================================================================
     private static void demonstrateRemoveOperations(java.util.Set<String> targetSet, String setName) {
         System.out.println("4) Удаление (" + setName + "): remove / removeAll / retainAll / clear / removeIf");
@@ -226,114 +262,133 @@ public class _09_2_Set {
         System.out.println("   До удаления: " + targetSet);
 
         boolean isRemovedSecond = targetSet.remove("второй");
-        System.out.println("   remove(\"второй\")                      -> удалено=" + isRemovedSecond + ", состояние=" + targetSet);
+        System.out.println("   remove(\"второй\")                      -> удалено="
+                + isRemovedSecond + ", состояние=" + targetSet);
 
-        java.util.List<String> toRemove = java.util.List.of("не-существует", "третий");
-        boolean isRemoveAllChanged = targetSet.removeAll(toRemove);
-        System.out.println("   removeAll([\"не-существует\",\"третий\"]) -> изменено=" + isRemoveAllChanged
-                + ", состояние=" + targetSet);
+        boolean isRemovedNotExisting = targetSet.remove("не-существует");
+        System.out.println("   remove(\"не-существует\")               -> удалено="
+                + isRemovedNotExisting + ", состояние=" + targetSet);
 
-        java.util.List<String> toKeep = java.util.List.of("первый", "четвертый");
-        boolean isRetainAllChanged = targetSet.retainAll(toKeep);
-        System.out.println("   retainAll([\"первый\",\"четвертый\"])     -> изменено=" + isRetainAllChanged
-                + ", состояние=" + targetSet);
+        java.util.Set<String> toRemove = java.util.Set.of("первый", "не-существует");
+        boolean isRemovedBatch = targetSet.removeAll(toRemove);
+        System.out.println("   removeAll([\"первый\",\"не-существует\"]) -> изменено="
+                + isRemovedBatch + ", состояние=" + targetSet);
 
-        boolean isRemoveIfChanged = targetSet.removeIf(value -> value.startsWith("ч"));
-        System.out.println("   removeIf(startsWith(\"ч\"))              -> изменено=" + isRemoveIfChanged
-                + ", состояние=" + targetSet);
+        targetSet.addAll(java.util.Set.of("a1", "a2", "b1", "b2"));
+        System.out.println("   Добавили для примеров: " + targetSet);
+
+        boolean isRetained = targetSet.retainAll(java.util.Set.of("a1", "b2", "x"));
+        System.out.println("   retainAll([\"a1\",\"b2\",\"x\"])            -> изменено="
+                + isRetained + ", состояние=" + targetSet);
+
+        boolean isRemovedIf = targetSet.removeIf(value -> value.startsWith("a"));
+        System.out.println("   removeIf(startsWith(\"a\"))             -> изменено="
+                + isRemovedIf + ", состояние=" + targetSet);
 
         targetSet.clear();
-        System.out.println("   clear()                                 -> состояние=" + targetSet
-                + ", size=" + targetSet.size() + ", isEmpty=" + targetSet.isEmpty());
+        System.out.println("   clear()                               -> состояние="
+                + targetSet + ", size=" + targetSet.size());
 
         System.out.println();
     }
 
     // =================================================================================================================
-    // 5) Итерация: for-each / Iterator (порядок зависит от реализации; безопасное удаление через iterator.remove)
+    // 5) Итерация: for-each / Iterator (Iterator.remove для безопасного удаления во время обхода)
     // =================================================================================================================
     private static void demonstrateIteration(java.util.Set<String> targetSet, String setName) {
         System.out.println("5) Итерация (" + setName + "): for-each / Iterator");
 
-        targetSet.addAll(java.util.List.of("первый", "второй", "третий"));
-        System.out.println("   Подготовлено множество: " + targetSet);
+        targetSet.addAll(java.util.Set.of("alpha", "beta", "gamma"));
+        System.out.println("   Текущее множество: " + targetSet);
 
-        System.out.println("   5.1) for-each:");
+        System.out.println("   Обход через for-each:");
         for (String value : targetSet) {
-            System.out.println("   - элемент=\"" + value + "\"");
+            System.out.println("   - value=\"" + value + "\"");
         }
 
-        System.out.println("   5.2) Iterator + безопасное удаление элемента во время обхода:");
+        System.out.println("   Удаление во время обхода: через Iterator.remove()");
         java.util.Iterator<String> iterator = targetSet.iterator();
         while (iterator.hasNext()) {
-            String element = iterator.next();
-            System.out.println("   - элемент=\"" + element + "\"");
-            if ("второй".equals(element)) {
+            String value = iterator.next();
+            if ("beta".equals(value)) {
                 iterator.remove();
-                System.out.println("     iterator.remove() выполнен для element=\"второй\"");
+                System.out.println("   removed value=\"beta\" via Iterator.remove()");
             }
         }
-        System.out.println("   После iterator.remove: " + targetSet);
+        System.out.println("   Итог после удаления: " + targetSet);
 
         System.out.println();
     }
 
     // =================================================================================================================
-    // 6) Преобразование и сравнение: toArray / копирование / equals (для Set порядок не важен)
+    // 6) Преобразование и сравнение: toArray / копирование / equals
     // =================================================================================================================
     private static void demonstrateConversionsAndEquality() {
         System.out.println("6) Преобразование и сравнение: toArray / копирование / equals");
 
-        java.util.Set<String> source = new java.util.LinkedHashSet<>(java.util.List.of(
-                "первый", "второй", "третий"
-        ));
-        System.out.println("   Исходное множество: " + source);
+        java.util.Set<String> source = new java.util.LinkedHashSet<>(java.util.List.of("первый", "второй", "третий"));
+        System.out.println("   Исходное множество (LinkedHashSet): " + source);
 
         Object[] asObjectArray = source.toArray();
-        System.out.println("   toArray()                    -> Object[], длина=" + asObjectArray.length
-                + ", первый=\"" + asObjectArray[0] + "\" (порядок зависит от реализации)");
+        System.out.println("   toArray()                          -> Object[], длина="
+                + asObjectArray.length + ", первый=\"" + asObjectArray[0] + "\" (порядок зависит от реализации)");
 
         String[] asStringArray = source.toArray(new String[0]);
-        System.out.println("   toArray(new String[0])       -> String[], длина=" + asStringArray.length
-                + ", последний=\"" + asStringArray[asStringArray.length - 1] + "\"");
+        System.out.println("   toArray(new String[0])             -> String[], длина="
+                + asStringArray.length + ", последний=\"" + asStringArray[asStringArray.length - 1] + "\"");
 
         java.util.Set<String> copyAsHashSet = new java.util.HashSet<>(source);
-        System.out.println("   Копирование: new HashSet<>(source) -> " + copyAsHashSet);
+        System.out.println("   Копирование: new HashSet<>(source) -> "
+                + copyAsHashSet);
 
         boolean isEquals = source.equals(copyAsHashSet);
-        System.out.println("   source.equals(copyAsHashSet)      -> " + isEquals + " (для Set порядок не влияет)");
+        System.out.println("   source.equals(copyAsHashSet)       -> "
+                + isEquals + " (для Set порядок не влияет)");
 
         copyAsHashSet.add("четвертый");
-        System.out.println("   copyAsHashSet.add(\"четвертый\")   -> source=" + source + ", copyAsHashSet=" + copyAsHashSet);
+        System.out.println("   copyAsHashSet.add(\"четвертый\")     -> source="
+                + source + ", copyAsHashSet=" + copyAsHashSet);
 
         System.out.println();
     }
 
     // =================================================================================================================
-    // 7) null в Set: HashSet/LinkedHashSet допускают один null; TreeSet обычно не допускает
+    // 7) null в Set: HashSet/LinkedHashSet допускают один null; TreeSet зависит от Comparator
     // =================================================================================================================
     private static void demonstrateNullTheoryAndPractice() {
         System.out.println("7) null в Set: теория + практика");
         /*
             HashSet/LinkedHashSet допускают null (как элемент), но не более одного (Set остаётся уникальным).
-            TreeSet при natural order не умеет сравнивать null с другими значениями -> NullPointerException.
+            TreeSet с natural order не умеет сравнивать null с другими значениями -> NullPointerException.
+            TreeSet может поддерживать null, если Comparator умеет сравнивать null (например, nullsFirst/nullsLast).
          */
 
         java.util.Set<String> hashSet = new java.util.HashSet<>();
         boolean isNullAddedFirst = hashSet.add(null);
         boolean isNullAddedSecond = hashSet.add(null);
 
-        System.out.println("   HashSet.add(null) (первый раз) -> изменено=" + isNullAddedFirst + ", состояние=" + hashSet);
-        System.out.println("   HashSet.add(null) (второй раз) -> изменено=" + isNullAddedSecond
-                + ", состояние=" + hashSet + " (дубликат null не добавился)");
+        System.out.println("   HashSet.add(null) (первый раз) -> изменено="
+                + isNullAddedFirst + ", состояние=" + hashSet);
+        System.out.println("   HashSet.add(null) (второй раз) -> изменено="
+                + isNullAddedSecond + ", состояние=" + hashSet + " (дубликат null не добавился)");
 
-        java.util.Set<String> treeSet = new java.util.TreeSet<>();
+        java.util.Set<String> treeSetNaturalOrder = new java.util.TreeSet<>();
         try {
-            treeSet.add(null);
+            treeSetNaturalOrder.add(null);
             System.out.println("   Неожиданно: TreeSet.add(null) выполнен без ошибки");
         } catch (NullPointerException exception) {
             System.out.println("   Ожидаемо: NullPointerException для TreeSet.add(null) при natural order");
         }
+
+        java.util.Comparator<String> nullFriendlyComparator =
+                java.util.Comparator.nullsFirst(java.util.Comparator.naturalOrder());
+        java.util.Set<String> treeSetWithNulls = new java.util.TreeSet<>(nullFriendlyComparator);
+        treeSetWithNulls.add("b");
+        treeSetWithNulls.add(null);
+        treeSetWithNulls.add("a");
+        System.out.println(
+                "   TreeSet с Comparator.nullsFirst: " + treeSetWithNulls + " (null допустим и стоит первым)"
+        );
 
         System.out.println();
     }
@@ -360,8 +415,8 @@ public class _09_2_Set {
         boolean containsUser = users.contains(lookupSameIdDifferentName);
 
         System.out.println("   Поиск: " + lookupSameIdDifferentName);
-        System.out.println("   users.contains(lookup) -> " + containsUser
-                + " (результат зависит от equals/hashCode; здесь равенство по userId)");
+        System.out.println("   users.contains(lookup)        -> "
+                + containsUser + " (результат зависит от equals/hashCode; здесь равенство по userId)");
 
         boolean isAddedDuplicate = users.add(new DemoUser(10, "ЕщёОдноИмя"));
         System.out.println("   users.add(дубликат по userId) -> изменено=" + isAddedDuplicate + ", состояние=" + users);
@@ -370,49 +425,55 @@ public class _09_2_Set {
     }
 
     // =================================================================================================================
-    // 9) Set.of: immutable + запрет null + запрет дубликатов при создании
+    // 9) Set.of / Set.copyOf: неизменяемость + запрет null + запрет дубликатов на этапе создания
     // =================================================================================================================
-    private static void demonstrateSetOfTheoryAndPractice() {
-        System.out.println("9) Set.of: теория + практика");
+    private static void demonstrateSetFactoriesTheoryAndPractice() {
+        System.out.println("9) Set.of / Set.copyOf: теория + практика");
         /*
             Set.of(...) создаёт неизменяемое (immutable) множество.
-            Свойства:
-            1) Любые структурные изменения (add/remove/clear и т.п.) -> UnsupportedOperationException.
-            2) null-элементы не допускаются -> NullPointerException при создании.
-            3) Дубликаты не допускаются -> IllegalArgumentException при создании.
+            - add/remove/clear → UnsupportedOperationException
+            - null запрещён → NullPointerException
+            - дубликаты запрещены → IllegalArgumentException
+
+            Set.copyOf(collection) — тоже неизменяемое множество;
+            - если collection уже immutable-set подходящего типа, может вернуть его же.
          */
 
         java.util.Set<String> readOnlyRoles = java.util.Set.of("USER", "ADMIN");
         System.out.println("   Set.of(\"USER\", \"ADMIN\") -> " + readOnlyRoles);
 
         try {
-            readOnlyRoles.add("AUDITOR");
-            System.out.println("   Неожиданно: add выполнен без ошибки");
+            readOnlyRoles.add("MANAGER");
+            System.out.println("   Неожиданно: readOnlyRoles.add выполнен без ошибки");
         } catch (UnsupportedOperationException exception) {
-            System.out.println("   Ожидаемо: UnsupportedOperationException для readOnlyRoles.add(...)");
+            System.out.println("   Ожидаемо: UnsupportedOperationException для readOnlyRoles.add(.)");
         }
 
         try {
-            java.util.Set.of("первый", null, "второй");
+            java.util.Set.of("ok", null);
             System.out.println("   Неожиданно: Set.of с null выполнен без ошибки");
         } catch (NullPointerException exception) {
-            System.out.println("   Ожидаемо: NullPointerException для Set.of(...) при наличии null-элемента");
+            System.out.println("   Ожидаемо: NullPointerException для Set.of(.) при наличии null-элемента");
         }
 
         try {
-            java.util.Set.of("первый", "первый");
+            java.util.Set.of("dup", "dup");
             System.out.println("   Неожиданно: Set.of с дубликатами выполнен без ошибки");
         } catch (IllegalArgumentException exception) {
-            System.out.println("   Ожидаемо: IllegalArgumentException для Set.of(...) при наличии дубликатов");
+            System.out.println("   Ожидаемо: IllegalArgumentException для Set.of(.) при наличии дубликатов");
         }
+
+        java.util.Set<String> source = new java.util.HashSet<>(java.util.List.of("alpha", "beta", "beta"));
+        java.util.Set<String> readOnlyCopy = java.util.Set.copyOf(source);
+        System.out.println("   Set.copyOf(source) -> " + readOnlyCopy + " (дубликаты отбрасываются на уровне Set)");
 
         System.out.println();
     }
 
     // =================================================================================================================
-    // 10) TreeSet / NavigableSet: first/last/higher/lower/subSet/headSet/tailSet (диапазоны как view)
+    // 10) TreeSet / NavigableSet: навигация и диапазоны; subSet/headSet/tailSet возвращают view
     // =================================================================================================================
-    private static void demonstrateTreeSetNavigableTheoryAndPractice() {
+    private static void demonstrateNavigableSetTheoryAndPractice() {
         System.out.println("10) TreeSet / NavigableSet: теория + практика");
         /*
             TreeSet реализует NavigableSet.
@@ -451,20 +512,47 @@ public class _09_2_Set {
     }
 
     // =================================================================================================================
-    // 11) Выбор реализации: быстрый membership / сохранение порядка вставки / отсортированность
+    // 11) Уникальность в TreeSet определяется сравнением: compareTo/Comparator
+    // =================================================================================================================
+    private static void demonstrateTreeSetUniquenessByComparator() {
+        System.out.println("11) TreeSet: уникальность определяется compareTo/Comparator");
+        /*
+            В TreeSet элемент считается “дубликатом”, если сравнение даёт 0.
+            Это может отличаться от equals(). Практическое правило:
+            - критерий сравнения должен быть согласован с equals, если ожидается одинаковая логика “уникальности”.
+         */
+
+        java.util.Comparator<DemoUser> byUserId = java.util.Comparator.comparingInt(DemoUser::getUserId);
+        java.util.Set<DemoUser> treeUsers = new java.util.TreeSet<>(byUserId);
+
+        DemoUser first = new DemoUser(10, "Сергей");
+        DemoUser sameIdDifferentName = new DemoUser(10, "ДругоеИмя");
+
+        treeUsers.add(first);
+        boolean isSecondAdded = treeUsers.add(sameIdDifferentName);
+
+        System.out.println("   treeUsers после add: " + treeUsers);
+        System.out.println("   add(тот же userId, другое имя) -> изменено="
+                + isSecondAdded + " (Comparator сравнил как 0, поэтому элемент не добавился)");
+
+        System.out.println();
+    }
+
+    // =================================================================================================================
+    // 12) Выбор реализации: скорость contains/add/remove vs порядок вставки vs сортировка/диапазоны
     // =================================================================================================================
     private static void demonstrateChoosingImplementation() {
-        System.out.println("11) Выбор реализации Set: краткая памятка");
+        System.out.println("12) Выбор реализации Set: краткая памятка");
         /*
             Выбор зависит от требований:
             1) Нужны максимально быстрые contains/add/remove и порядок не важен -> HashSet.
-            2) Нужны уникальные элементы и важно сохранить порядок вставки -> LinkedHashSet.
+            2) Нужны уникальные элементы и важен порядок вставки -> LinkedHashSet.
             3) Нужна сортировка и диапазоны/навигация -> TreeSet.
          */
 
-        System.out.println("   HashSet       -> быстрый membership, порядок не гарантирован");
-        System.out.println("   LinkedHashSet -> membership + порядок вставки");
-        System.out.println("   TreeSet       -> membership + отсортированность + диапазоны/навигация");
+        System.out.println("   HashSet       -> хэш-множество: быстрые contains/add/remove, порядок не гарантирован");
+        System.out.println("   LinkedHashSet -> хэш-множество: contains/add/remove + порядок вставки");
+        System.out.println("   TreeSet       -> множество на дереве поиска: сортировка + навигация/диапазоны");
         System.out.println();
     }
 
@@ -481,6 +569,10 @@ public class _09_2_Set {
             }
             this.userId = userId;
             this.displayName = displayName.trim();
+        }
+
+        private int getUserId() {
+            return userId;
         }
 
         @Override
@@ -508,30 +600,27 @@ public class _09_2_Set {
 
     public static void main(String[] args) {
         demonstrateCreationAndBasicProperties();
-
         java.util.Set<String> hashSetDemo = new java.util.HashSet<>();
         demonstrateAddOperations(hashSetDemo, "HashSet");
         demonstrateContainsOperations(hashSetDemo, "HashSet");
         demonstrateRemoveOperations(hashSetDemo, "HashSet");
         demonstrateIteration(hashSetDemo, "HashSet");
-
         java.util.Set<String> linkedHashSetDemo = new java.util.LinkedHashSet<>();
         demonstrateAddOperations(linkedHashSetDemo, "LinkedHashSet");
         demonstrateContainsOperations(linkedHashSetDemo, "LinkedHashSet");
         demonstrateRemoveOperations(linkedHashSetDemo, "LinkedHashSet");
         demonstrateIteration(linkedHashSetDemo, "LinkedHashSet");
-
         java.util.Set<String> treeSetDemo = new java.util.TreeSet<>();
         demonstrateAddOperations(treeSetDemo, "TreeSet");
         demonstrateContainsOperations(treeSetDemo, "TreeSet");
         demonstrateRemoveOperations(treeSetDemo, "TreeSet");
         demonstrateIteration(treeSetDemo, "TreeSet");
-
         demonstrateConversionsAndEquality();
         demonstrateNullTheoryAndPractice();
         demonstrateHashCodeEqualsTheoryAndPractice();
-        demonstrateSetOfTheoryAndPractice();
-        demonstrateTreeSetNavigableTheoryAndPractice();
+        demonstrateSetFactoriesTheoryAndPractice();
+        demonstrateNavigableSetTheoryAndPractice();
+        demonstrateTreeSetUniquenessByComparator();
         demonstrateChoosingImplementation();
     }
 }
