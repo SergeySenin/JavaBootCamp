@@ -2,14 +2,22 @@
 1)  Памятка по коду на 1 модуле буткемпа | 1 видео: 49:00 |
 2)  Что такое Git, коммиты, ветки | 1 видео: всё | 2 видео: всё | 4 воркшоп: весь |
 3)  Бейсик Java | 1 воркшоп: 19:00 | 1 воркшоп: 21:50 |
+task_1-task_5
 4)  Основы SQL | 1 видео: всё |
 5)  Java Collection | желательно |
+task_6-task_13
 6)  Java 8: Функциональные интерфейсы, Лямбды | 1 видео: всё |
+task_14-task_28
 7)  Java 8: Коллекции, Stream API, Optional | 1 видео: всё | 2 воркшоп: до 12:45 |
+task_29-task_36
 8)  Многопоточность — Parallelism, Thread (Join в многопоточности) | - |
+task_37-task_47
 9)  Многопоточность — synchronized, wait and notify | - |
+task_48-task_57
 10) Многопоточность — Асинхронность, Future, CompletableFuture (ExecutorService) | - |
+task_58-task_71
 11) Многопоточность — Volatile, Неизменяемые классы, Deadlock, пакет Concurrency | - |
+task_72-task_82
 
 12) Что такое Spring и почему мы используем его в проекте | 2 видео: 17:45 | 4 видео: всё |
 13) Inversion of control | 1 видео: всё |
