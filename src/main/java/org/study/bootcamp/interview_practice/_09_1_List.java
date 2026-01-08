@@ -168,20 +168,19 @@ public class _09_1_List {
 
         System.out.println("   Исходный список: " + targetList);
 
-        targetList.add("первый");
         targetList.add("второй");
-        System.out.println("   add(\"первый\"), add(\"второй\") -> " + targetList);
+        System.out.println("   add(\"второй\")               -> " + targetList);
 
-        targetList.add(1, "третий");
-        System.out.println("   add(index=1, \"третий\")       -> " + targetList + " (элементы справа сдвинулись)");
+        targetList.add(0, "первый");
+        System.out.println("   add(index=0, \"первый\")      -> " + targetList + " (элементы справа сдвинулись)");
 
-        java.util.List<String> batch = java.util.List.of();
+        java.util.List<String> prefix = java.util.List.of("третий");
+        boolean isPrefixAdded = targetList.addAll(2, prefix);
+        System.out.println("   addAll(index=2, [\"третий\"]) -> " + targetList + ", изменено=" + isPrefixAdded);
+
+        java.util.List<String> batch = java.util.List.of("четвертый");
         boolean isBatchAdded = targetList.addAll(batch);
-        System.out.println("   addAll([])                   -> " + targetList + ", изменено=" + isBatchAdded);
-
-        java.util.List<String> prefix = java.util.List.of();
-        boolean isPrefixAdded = targetList.addAll(0, prefix);
-        System.out.println("   addAll(index=0, [])          -> " + targetList + ", изменено=" + isPrefixAdded);
+        System.out.println("   addAll([\"четвертый\"])       -> " + targetList + ", изменено=" + isBatchAdded);
 
         System.out.println();
     }
@@ -198,7 +197,7 @@ public class _09_1_List {
         System.out.println("   get(0)                     -> \"" + firstElement + "\"");
 
         String previousValue = targetList.set(0, "первый-обновлено");
-        System.out.println("   set(0, \"первый-обновлено\") -> previousValue=\"" + previousValue + "\"");
+        System.out.println("   set(0, \"первый-обновлено\") -> предыдущееЗначение=\"" + previousValue + "\"");
         System.out.println("   После set: " + targetList);
 
         try {
@@ -217,20 +216,20 @@ public class _09_1_List {
     private static void demonstrateSearchOperations(java.util.List<String> targetList, String listName) {
         System.out.println("4) Поиск (" + listName + "): contains / indexOf / lastIndexOf / containsAll");
 
-        targetList.add("второй"); // создадим дубликат
+        targetList.set(2, "второй"); // создадим дубликат без увеличения размера списка
         System.out.println("   Подготовлен список с дубликатом \"второй\": " + targetList);
 
         boolean isContainsSecond = targetList.contains("второй");
         int firstSecondIndex = targetList.indexOf("второй");
         int lastSecondIndex = targetList.lastIndexOf("второй");
 
-        System.out.println("   contains(\"второй\")                -> " + isContainsSecond);
-        System.out.println("   indexOf(\"второй\")                 -> " + firstSecondIndex + " (первое вхождение)");
-        System.out.println("   lastIndexOf(\"второй\")             -> " + lastSecondIndex + " (последнее вхождение)");
+        System.out.println("   contains(\"второй\")                   -> " + isContainsSecond);
+        System.out.println("   indexOf(\"второй\")                    -> " + firstSecondIndex + " (первое    вх-ние)");
+        System.out.println("   lastIndexOf(\"второй\")                -> " + lastSecondIndex  + " (последнее вх-ние)");
 
-        java.util.List<String> required = java.util.List.of("второй", "третий");
+        java.util.List<String> required = java.util.List.of("второй", "четвертый");
         boolean isContainsAll = targetList.containsAll(required);
-        System.out.println("   containsAll([\"второй\", \"третий\"]) -> " + isContainsAll);
+        System.out.println("   containsAll([\"второй\", \"четвертый\"]) -> " + isContainsAll);
 
         System.out.println("   Примечание: contains/indexOf используют equals()." +
                 " Для сложных объектов корректность equals критична.");
@@ -261,10 +260,10 @@ public class _09_1_List {
                 "   removeAll([\"не-существует\"])       -> изменено=" + isRemoveAllChanged + ", список=" + targetList
         );
 
-        java.util.List<String> toKeep = java.util.List.of("третий", "четвертый");
+        java.util.List<String> toKeep = java.util.List.of("второй", "четвертый");
         boolean isRetainAllChanged = targetList.retainAll(toKeep);
         System.out.println(
-                "   retainAll([\"третий\", \"четвертый\"]) -> изменено=" + isRetainAllChanged + ", список=" + targetList
+                "   retainAll([\"второй\", \"четвертый\"]) -> изменено=" + isRetainAllChanged + ", список=" + targetList
         );
 
         boolean isRemoveIfChanged = targetList.removeIf(value -> value.startsWith("ч"));
@@ -287,7 +286,7 @@ public class _09_1_List {
     private static void demonstrateIteration(java.util.List<String> targetList, String listName) {
         System.out.println("6) Итерация (" + listName + "): for-each / Iterator / ListIterator");
 
-        targetList.addAll(java.util.List.of());
+        targetList.addAll(java.util.List.of("первый", "второй", "третий"));
         System.out.println("   Подготовлен список: " + targetList);
 
         System.out.println("   6.1) for-each:");
@@ -296,7 +295,9 @@ public class _09_1_List {
         }
 
         System.out.println("   6.2) Iterator (вручную):");
-        for (String element : targetList) {
+        java.util.Iterator<String> iterator = targetList.iterator();
+        while (iterator.hasNext()) {
+            String element = iterator.next();
             System.out.println("   - элемент=\"" + element + "\"");
         }
 
@@ -308,8 +309,8 @@ public class _09_1_List {
             System.out.println("   - nextIndex=" + nextIndex + ", элемент=\"" + element + "\"");
 
             if ("второй".equals(element)) {
-                listIterator.set("второй");
-                System.out.println("     set(\"второй\") выполнен, index=" + (listIterator.previousIndex()));
+                listIterator.set("второй-обновлено");
+                System.out.println("     set(\"второй-обновлено\") выполнен, index=" + (listIterator.previousIndex()));
             }
             if ("третий".equals(element)) {
                 listIterator.add("четвертый");
@@ -380,32 +381,32 @@ public class _09_1_List {
         System.out.println("   Исходный список: " + original);
 
         java.util.List<String> view = original.subList(1, 4);
-        System.out.println("   subList(1, 4) view -> " + view + " (ожидаемо: [второй, третий, четвертый])");
+        System.out.println("   subList(1, 4) представление -> " + view + " (ожидаемо: [второй, третий, четвертый])");
 
         view.set(0, "второй-обновлено");
         System.out.println("   view.set(0, \"второй-обновлено\") выполнен");
-        System.out.println("   - view:     " + view);
-        System.out.println("   - original: " + original + " (изменение видно в исходном списке)");
+        System.out.println("   - представление: " + view);
+        System.out.println("   - исходныйСписок: " + original + " (изменение видно в исходном списке)");
 
         view.remove(1);
         System.out.println("   view.remove(index=1) выполнен");
-        System.out.println("   - view:     " + view);
-        System.out.println("   - original: " + original + " (структурное удаление также отразилось)");
+        System.out.println("   - представление: " + view);
+        System.out.println("   - исходныйСписок: " + original + " (структурное удаление также отразилось)");
 
         try {
             original.add("пятый");
             System.out.println("   original.add(\"пятый\") выполнен (структурная модификация исходного списка)");
-            System.out.println("   Попытка использовать view после модификации original:");
+            System.out.println("   Попытка использовать представление после модификации исходного списка:");
 
             view.add("шестой");
             System.out.println("   Неожиданно: view.add(\"шестой\") выполнен без ошибки");
         } catch (java.util.ConcurrentModificationException exception) {
-            System.out.println("   Ожидаемо: ConcurrentModificationException" +
-                    " при работе с view после структурной модификации original");
+            System.out.println("   Ожидаемо: ConcurrentModificationException при работе" +
+                    " с представлением после структурной модификации исходного списка");
         }
 
         System.out.println();
-        System.out.println("   Практика: при независимой копии диапазона нужен  новый ArrayList<>(subList(...)):");
+        System.out.println("   Практика: при независимой копии диапазона нужен новый ArrayList<>(subList(...)):");
         java.util.List<String> safeCopy = new java.util.ArrayList<>(original.subList(0, Math.min(3, original.size())));
         System.out.println("   new ArrayList<>(original.subList(...)) -> " + safeCopy);
 
@@ -571,14 +572,14 @@ public class _09_1_List {
         demonstrateAddOperations(arrayListDemo, "ArrayList");
         demonstrateGetAndSet(arrayListDemo, "ArrayList");
         demonstrateSearchOperations(arrayListDemo, "ArrayList");
-        demonstrateIteration(arrayListDemo, "ArrayList");
         demonstrateRemoveOperations(arrayListDemo, "ArrayList");
+        demonstrateIteration(arrayListDemo, "ArrayList");
         java.util.List<String> linkedListDemo = new java.util.LinkedList<>();
         demonstrateAddOperations(linkedListDemo, "LinkedList");
         demonstrateGetAndSet(linkedListDemo, "LinkedList");
         demonstrateSearchOperations(linkedListDemo, "LinkedList");
-        demonstrateIteration(linkedListDemo, "LinkedList");
         demonstrateRemoveOperations(linkedListDemo, "LinkedList");
+        demonstrateIteration(linkedListDemo, "LinkedList");
         demonstrateConversionsAndEquality();
         demonstrateSubListTheoryAndPractice();
         demonstrateSortTheoryAndPractice();
