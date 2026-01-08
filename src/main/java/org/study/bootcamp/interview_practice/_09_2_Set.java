@@ -7,17 +7,21 @@ package org.study.bootcamp.interview_practice;
  * equals для Set не зависит от порядка: важен только состав элементов.
  *
  * Примеры из “соцсети / банк”:
- * - HashSet (Хэш-множество):
- *   - проверка “уже лайкнул?” (быстрое contains по userId);
- *   - набор уникальных категорий/тегов (чтобы не было повторов).
- * - LinkedHashSet (Хэш-множество с порядком вставки):
- *   - уникальные элементы + нужен порядок вставки (например, “история последних уникальных запросов”).
- * - TreeSet (Множество на дереве поиска):
- *   - уникальные элементы + нужен отсортированный порядок и диапазоны
- *     (например, уникальные суммы/даты с быстрым получением ближайших значений).
+ * - HashSet (хэш-множество):
+ *   - задача: «быстро проверить наличие» (membership) и «не допустить повторов»;
+ *   - пример (соцсеть): уникальные идентификаторы пользователей, которые поставили реакцию на пост;
+ *   - пример (банк): уникальные идентификаторы активных сессий/устройств клиента.
+ * - LinkedHashSet (хэш-множество с порядком вставки):
+ *   - задача: уникальность + нужен предсказуемый порядок итерации (как добавляли);
+ *   - пример (соцсеть): уникальные “последние просмотренные профили” в порядке просмотра;
+ *   - пример (банк): уникальные “последние шаблоны платежей” в порядке использования.
+ * - TreeSet (отсортированное множество на дереве поиска):
+ *   - задача: уникальность + сортировка + диапазоны/навигация (ближайшие значения, от/до);
+ *   - пример (соцсеть): уникальные временные метки/даты публикаций с быстрым выбором диапазона;
+ *   - пример (банк): уникальные суммы/даты операций с быстрым получением ближайшей суммы (меньше/больше).
  *
  * | -------------------------- | --------------------------------------------------------------------------------------
- * | Критерий                   | HashSet (Хэш-множество)
+ * | Критерий                   | HashSet (хэш-множество)
  * | -------------------------- | --------------------------------------------------------------------------------------
  * | Порядок элементов          | Не гарантируется (может меняться)
  * | -------------------------- | --------------------------------------------------------------------------------------
@@ -27,11 +31,15 @@ package org.study.bootcamp.interview_practice;
  * | -------------------------- | --------------------------------------------------------------------------------------
  * | Потокобезопасность         | Нет (не синхронизирован)
  * | -------------------------- | --------------------------------------------------------------------------------------
- * | Внутренняя структура       | Хэш-таблица (ключ — элемент; уникальность через equals/hashCode)
+ * | Внутренняя структура       | Основа — HashMap: элементы хранятся как ключи (value — служебный объект).
+ * |                            | Внутри — массив “корзин” (бакетов); индекс корзины вычисляется из hashCode.
+ * |                            | Коллизии: в корзине хранится цепочка узлов; при большом числе коллизий в Java 8+
+ * |                            | корзина может преобразоваться в дерево (Red-Black Tree) для ускорения поиска.
+ * |                            | При росте размера происходит расширение (resize) и перераспределение элементов.
  * | -------------------------- | --------------------------------------------------------------------------------------
  *
  * | -------------------------- | --------------------------------------------------------------------------------------
- * | Критерий                   | LinkedHashSet (Хэш-множество с порядком вставки)
+ * | Критерий                   | LinkedHashSet (хэш-множество с порядком вставки)
  * | -------------------------- | --------------------------------------------------------------------------------------
  * | Порядок элементов          | Сохраняется (порядок вставки)
  * | -------------------------- | --------------------------------------------------------------------------------------
@@ -41,11 +49,13 @@ package org.study.bootcamp.interview_practice;
  * | -------------------------- | --------------------------------------------------------------------------------------
  * | Потокобезопасность         | Нет (не синхронизирован)
  * | -------------------------- | --------------------------------------------------------------------------------------
- * | Внутренняя структура       | HashSet + связанный порядок (доп.ссылки для сохранения порядка)
+ * | Внутренняя структура       | Основа — LinkedHashMap: как HashMap + двусвязный порядок вставки.
+ * |                            | Каждый элемент дополнительно связан ссылками “до/после” для предсказуемой итерации.
+ * |                            | Цена: чуть больше памяти (служебные ссылки) и немного больше накладных расходов.
  * | -------------------------- | --------------------------------------------------------------------------------------
  *
  * | -------------------------- | --------------------------------------------------------------------------------------
- * | Критерий                   | TreeSet (Множество на дереве поиска)
+ * | Критерий                   | TreeSet (множество на дереве поиска)
  * | -------------------------- | --------------------------------------------------------------------------------------
  * | Порядок элементов          | Отсортирован (natural order или Comparator)
  * | -------------------------- | --------------------------------------------------------------------------------------
@@ -55,7 +65,10 @@ package org.study.bootcamp.interview_practice;
  * | -------------------------- | --------------------------------------------------------------------------------------
  * | Потокобезопасность         | Нет (не синхронизирован)
  * | -------------------------- | --------------------------------------------------------------------------------------
- * | Внутренняя структура       | Сбалансированное дерево (Red-Black Tree)
+ * | Внутренняя структура       | Основа — TreeMap: сбалансированное дерево поиска (Red-Black Tree).
+ * |                            | В узле хранятся: ключ (элемент), ссылки parent/left/right и цвет балансировки.
+ * |                            | Операции add/remove/contains — O(log n) за счёт высоты дерева и перебалансировки.
+ * |                            | Доступны навигация и диапазоны (lower/higher/subSet/headSet/tailSet).
  * | -------------------------- | --------------------------------------------------------------------------------------
  *
  * @author Sergey
@@ -131,30 +144,34 @@ public class _09_2_Set {
      */
 
     /*
-        1) HashSet (хэш-множество)
-        Создание пустого множества:
-        java.util.Set<Тип> имяМножества = new java.util.HashSet<>();
+    Set — необходимый набор вариантов создания (популярные случаи)
 
-        Создание из другой коллекции (копирование элементов):
-        java.util.Set<Тип> имяМножества = new java.util.HashSet<>(java.util.List.of(элемент1, элемент2, ...));
+    1) HashSet (хэш-множество) — базовый выбор “по умолчанию”
+    Создание пустого множества:
+    java.util.Set<Тип> имяМножества = new java.util.HashSet<>();
 
-        2) LinkedHashSet (хэш-множество с порядком вставки)
-        java.util.Set<Тип> имяМножества = new java.util.LinkedHashSet<>();
+    Создание из другой коллекции (независимая копия элементов):
+    java.util.Set<Тип> имяМножества = new java.util.HashSet<>(sourceCollection);
 
-        Создание из другой коллекции (копирование элементов + сохранение порядка итерации, как в источнике):
-        java.util.Set<Тип> имяМножества = new java.util.LinkedHashSet<>(sourceCollection);
+    2) LinkedHashSet (хэш-множество с порядком вставки) — когда важен порядок итерации
+    Создание пустого множества:
+    java.util.Set<Тип> имяМножества = new java.util.LinkedHashSet<>();
 
-        3) TreeSet (множество на дереве поиска; отсортированное)
-        java.util.Set<Тип> имяМножества = new java.util.TreeSet<>();                 // элементы должны быть Comparable
-        java.util.Set<Тип> имяМножества = new java.util.TreeSet<>(comparator);       // порядок через Comparator
-        java.util.Set<Тип> имяМножества = new java.util.TreeSet<>(sourceCollection); // копирование + сортировка
+    Создание из другой коллекции (копирование + сохранение порядка итерации, как в источнике):
+    java.util.Set<Тип> имяМножества = new java.util.LinkedHashSet<>(sourceCollection);
 
-        4) Неизменяемые множества (immutable)
-        java.util.Set<Тип> readOnly = java.util.Set.of(элемент1, элемент2, ...);  // null запрещён, дубликаты запрещены
-        java.util.Set<Тип> readOnlyCopy = java.util.Set.copyOf(sourceCollection); // null запрещён
+    3) TreeSet (множество на дереве поиска; отсортированное) — когда нужна сортировка/диапазоны
+    java.util.Set<Тип> имяМножества = new java.util.TreeSet<>();           // элементы должны быть Comparable
+    java.util.Set<Тип> имяМножества = new java.util.TreeSet<>(comparator); // порядок через Comparator
 
-        5) “Только чтение” как представление (view)
-        java.util.Set<Тип> view = java.util.Collections.unmodifiableSet(mutableSet); // запрет модификаций через view
+    Неизменяемое множество (константа/фиксированный набор значений):
+    java.util.Set<Тип> имяМножества = java.util.Set.of(элемент1, элемент2, ...);
+
+    Неизменяемая копия (immutable snapshot) существующей коллекции:
+    java.util.Set<Тип> имяМножества = java.util.Set.copyOf(sourceCollection);
+
+    “Только чтение” как представление (view) над изменяемым множеством:
+    java.util.Set<Тип> имяМножества = java.util.Collections.unmodifiableSet(mutableSet);
      */
 
     // =================================================================================================================
@@ -274,15 +291,15 @@ public class _09_2_Set {
         System.out.println("   removeAll([\"первый\",\"не-существует\"]) -> изменено="
                 + isRemovedBatch + ", состояние=" + targetSet);
 
-        targetSet.addAll(java.util.Set.of("a1", "a2", "b1", "b2"));
-        System.out.println("   Добавили для примеров: " + targetSet);
+        targetSet.addAll(java.util.Set.of("первый", "второй", "третий", "четвертый"));
+        System.out.println("   Подготовлено множество для примеров: " + targetSet);
 
-        boolean isRetained = targetSet.retainAll(java.util.Set.of("a1", "b2", "x"));
-        System.out.println("   retainAll([\"a1\",\"b2\",\"x\"])            -> изменено="
+        boolean isRetained = targetSet.retainAll(java.util.Set.of("первый", "четвертый", "не-существует"));
+        System.out.println("   retainAll([\"первый\",\"четвертый\",\"не-существует\"]) -> изменено="
                 + isRetained + ", состояние=" + targetSet);
 
-        boolean isRemovedIf = targetSet.removeIf(value -> value.startsWith("a"));
-        System.out.println("   removeIf(startsWith(\"a\"))             -> изменено="
+        boolean isRemovedIf = targetSet.removeIf(value -> value.startsWith("ч"));
+        System.out.println("   removeIf(начинаетсяС(\"ч\"))            -> изменено="
                 + isRemovedIf + ", состояние=" + targetSet);
 
         targetSet.clear();
@@ -296,26 +313,27 @@ public class _09_2_Set {
     // 5) Итерация: for-each / Iterator (Iterator.remove для безопасного удаления во время обхода)
     // =================================================================================================================
     private static void demonstrateIteration(java.util.Set<String> targetSet, String setName) {
-        System.out.println("5) Итерация (" + setName + "): for-each / Iterator");
+        System.out.println("5) Итерация (" + setName + "): цикл for-each / итератор");
 
-        targetSet.addAll(java.util.Set.of("alpha", "beta", "gamma"));
-        System.out.println("   Текущее множество: " + targetSet);
+        targetSet.addAll(java.util.Set.of("первый", "второй", "третий"));
+        System.out.println("   Подготовлено множество: " + targetSet);
 
-        System.out.println("   Обход через for-each:");
-        for (String value : targetSet) {
-            System.out.println("   - value=\"" + value + "\"");
+        System.out.println("   5.1) Обход циклом for-each:");
+        for (String element : targetSet) {
+            System.out.println("   - элемент=\"" + element + "\"");
         }
 
         System.out.println("   Удаление во время обхода: через Iterator.remove()");
         java.util.Iterator<String> iterator = targetSet.iterator();
         while (iterator.hasNext()) {
-            String value = iterator.next();
-            if ("beta".equals(value)) {
+            String element = iterator.next();
+            System.out.println("   - элемент=\"" + element + "\"");
+            if ("второй".equals(element)) {
                 iterator.remove();
-                System.out.println("   removed value=\"beta\" via Iterator.remove()");
+                System.out.println("     remove итератора выполнен для элемента=\"второй\"");
             }
         }
-        System.out.println("   Итог после удаления: " + targetSet);
+        System.out.println("   После удаления через итератор: " + targetSet);
 
         System.out.println();
     }
@@ -383,9 +401,9 @@ public class _09_2_Set {
         java.util.Comparator<String> nullFriendlyComparator =
                 java.util.Comparator.nullsFirst(java.util.Comparator.naturalOrder());
         java.util.Set<String> treeSetWithNulls = new java.util.TreeSet<>(nullFriendlyComparator);
-        treeSetWithNulls.add("b");
+        treeSetWithNulls.add("б");
         treeSetWithNulls.add(null);
-        treeSetWithNulls.add("a");
+        treeSetWithNulls.add("а");
         System.out.println(
                 "   TreeSet с Comparator.nullsFirst: " + treeSetWithNulls + " (null допустим и стоит первым)"
         );
@@ -439,33 +457,33 @@ public class _09_2_Set {
             - если collection уже immutable-set подходящего типа, может вернуть его же.
          */
 
-        java.util.Set<String> readOnlyRoles = java.util.Set.of("USER", "ADMIN");
-        System.out.println("   Set.of(\"USER\", \"ADMIN\") -> " + readOnlyRoles);
+        java.util.Set<String> readOnlyRoles = java.util.Set.of("ПОЛЬЗОВАТЕЛЬ", "АДМИНИСТРАТОР");
+        System.out.println("   Set.of(\"ПОЛЬЗОВАТЕЛЬ\", \"АДМИНИСТРАТОР\") -> " + readOnlyRoles);
 
         try {
-            readOnlyRoles.add("MANAGER");
+            readOnlyRoles.add("АУДИТОР");
             System.out.println("   Неожиданно: readOnlyRoles.add выполнен без ошибки");
         } catch (UnsupportedOperationException exception) {
             System.out.println("   Ожидаемо: UnsupportedOperationException для readOnlyRoles.add(.)");
         }
 
         try {
-            java.util.Set.of("ok", null);
+            java.util.Set.of("норма", null);
             System.out.println("   Неожиданно: Set.of с null выполнен без ошибки");
         } catch (NullPointerException exception) {
             System.out.println("   Ожидаемо: NullPointerException для Set.of(.) при наличии null-элемента");
         }
 
         try {
-            java.util.Set.of("dup", "dup");
+            java.util.Set.of("дубль", "дубль");
             System.out.println("   Неожиданно: Set.of с дубликатами выполнен без ошибки");
         } catch (IllegalArgumentException exception) {
             System.out.println("   Ожидаемо: IllegalArgumentException для Set.of(.) при наличии дубликатов");
         }
 
-        java.util.Set<String> source = new java.util.HashSet<>(java.util.List.of("alpha", "beta", "beta"));
+        java.util.Set<String> source = new java.util.HashSet<>(java.util.List.of("первый", "второй", "второй"));
         java.util.Set<String> readOnlyCopy = java.util.Set.copyOf(source);
-        System.out.println("   Set.copyOf(source) -> " + readOnlyCopy + " (дубликаты отбрасываются на уровне Set)");
+        System.out.println("   Set.copyOf(source) -> " + readOnlyCopy + " (дубликаты отсутствуют по определению Set)");
 
         System.out.println();
     }
