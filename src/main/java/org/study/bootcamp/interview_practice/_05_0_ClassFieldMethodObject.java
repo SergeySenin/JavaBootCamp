@@ -16,7 +16,7 @@
 - Обратный домен (com.company.project)
  */
 
-package org.study.bootcamp.interview_practice._05_package;
+package org.study.bootcamp.interview_practice;
 
 /*
 Импорты — это механизм подключения классов из других пакетов

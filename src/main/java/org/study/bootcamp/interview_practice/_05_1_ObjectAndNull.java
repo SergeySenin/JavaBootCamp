@@ -1,4 +1,4 @@
-package org.study.bootcamp.interview_practice._05_package;
+package org.study.bootcamp.interview_practice;
 
 import java.util.Objects;
 

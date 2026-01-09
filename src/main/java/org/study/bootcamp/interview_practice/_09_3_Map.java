@@ -14,17 +14,17 @@ package org.study.bootcamp.interview_practice;
  * Примеры из “соцсети / банк”:
  * - HashMap:
  *   - задача: быстрый доступ по ключу (O(1) в среднем);
- *   - пример (соцсеть): userId -> профиль пользователя; email -> userId;
- *   - пример (банк): accountId -> текущий баланс; transactionId -> состояние обработки.
+ *   - пример (соцсеть): дописать один пример...
+ *   - пример (банк): дописать один пример...
  * - LinkedHashMap:
  *   - задача: быстрый доступ по ключу + предсказуемый порядок итерации (в порядке вставки),
  *     либо «LRU-порядок» (по обращению) для кеша;
- *   - пример (соцсеть): кеш «последние просмотренные профили» userId -> timestamp;
- *   - пример (банк): кеш «последние курсы валют» currencyPair -> rate.
+ *   - пример (соцсеть): дописать один пример...
+ *   - пример (банк): дописать один пример...
  * - TreeMap:
  *   - задача: ключи отсортированы + диапазоны/навигация;
- *   - пример (соцсеть): timestamp -> список событий (выборка по диапазону дат);
- *   - пример (банк): дата -> сумма операций за день; быстрый поиск ближайшей даты операции.
+ *   - пример (соцсеть): дописать один пример...
+ *   - пример (банк): дописать один пример...
  *
  * | -------------------------- | --------------------------------------------------------------------------------------
  * | Критерий                   | HashMap (хэш-отображение)
@@ -37,7 +37,7 @@ package org.study.bootcamp.interview_practice;
  * | -------------------------- | --------------------------------------------------------------------------------------
  * | Потокобезопасность         | Нет (не синхронизирован)
  * | -------------------------- | --------------------------------------------------------------------------------------
- * | Внутренняя структура       | Хэш-таблица: бакеты + список/дерево в бакете (в среднем O(1) доступ по ключу)
+ * | Внутренняя структура       | Подробно дописать (как в Set)...
  * | -------------------------- | --------------------------------------------------------------------------------------
  *
  * | -------------------------- | --------------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ package org.study.bootcamp.interview_practice;
  * | -------------------------- | --------------------------------------------------------------------------------------
  * | Потокобезопасность         | Нет (не синхронизирован)
  * | -------------------------- | --------------------------------------------------------------------------------------
- * | Внутренняя структура       | Как HashMap + двусвязный порядок (служебные ссылки “до/после”)
+ * | Внутренняя структура       | Подробно дописать (как в Set)...
  * | -------------------------- | --------------------------------------------------------------------------------------
  *
  * | -------------------------- | --------------------------------------------------------------------------------------
@@ -65,46 +65,114 @@ package org.study.bootcamp.interview_practice;
  * | -------------------------- | --------------------------------------------------------------------------------------
  * | Потокобезопасность         | Нет (не синхронизирован)
  * | -------------------------- | --------------------------------------------------------------------------------------
- * | Внутренняя структура       | Сбалансированное дерево поиска (Red-Black Tree), операции O(log n)
+ * | Внутренняя структура       | Подробно дописать (как в Set)...
  * | -------------------------- | --------------------------------------------------------------------------------------
- *
- *    Создание:
- *    java.util.Map<K, V> имя = new java.util.HashMap<>();
- *    java.util.Map<K, V> имя = new java.util.LinkedHashMap<>();
- *    java.util.NavigableMap<K, V> имя = new java.util.TreeMap<>();
- *
- *    Запись:
- *    V previous = map.put(key, value);              // кладёт/перезаписывает, возвращает старое значение (или null)
- *    V existing = map.putIfAbsent(key, value);      // кладёт только если ключа не было
- *    boolean replaced = map.replace(key, old, new); // заменяет только если совпало старое значение
- *    V computed = map.computeIfAbsent(key, k -> v); // вычисляет, если ключ отсутствует
- *    V merged = map.merge(key, value, (a,b) -> c);  // объединяет старое и новое
- *
- *    Чтение:
- *    V value = map.get(key);
- *    V value = map.getOrDefault(key, defaultValue);
- *    boolean exists = map.containsKey(key);
- *
- *    Удаление:
- *    V removed = map.remove(key);
- *    boolean removedPair = map.remove(key, value);
- *
- *    Представления (view) — ЖИВЫЕ и связаны с Map:
- *    java.util.Set<K> keys = map.keySet();
- *    java.util.Collection<V> values = map.values();
- *    java.util.Set<java.util.Map.Entry<K, V>> entries = map.entrySet();
- *
- *    Неизменяемые Map:
- *    java.util.Map<K, V> constant = java.util.Map.of(k1, v1, k2, v2, ...);      // null запрещён
- *    java.util.Map<K, V> snapshot = java.util.Map.copyOf(sourceMap);            // null запрещён
- *    java.util.Map<K, V> readOnly = java.util.Collections.unmodifiableMap(map); // view “только чтение”
  *
  * @author Sergey
  */
 public class _09_3_Map {
 
-// O(1) — константно                    | O(n) — линейно
-// ≈ “один шаг”; размер почти не влияет | ≈ “пройтись по всем”; рост прямо пропорционален
+// O(1) — константно                    | O(n) — линейно                                  | O(log n) — логарифмически
+// ≈ “один шаг”; размер почти не влияет | ≈ “пройтись по всем”; рост прямо пропорционален | ≈ “дерево”; рост медленный
+
+    /**
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | Скорость основных операций | HashMap
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | put(key, value)            | в среднем O(1) (быстро); зависит от качества hashCode и количества коллизий
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | get(key)                   | в среднем O(1) (быстро)
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | remove(key)                | в среднем O(1) (быстро)
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | containsKey(key)           | в среднем O(1) (быстро)
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | Итерация for-each          | O(n) (средне) — порядок не гарантируется
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | Преимущества               | 1) Быстрый доступ по ключу в среднем.
+     *  |                            | 2) Универсальный выбор “по умолчанию”, когда порядок не важен.
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | Недостатки                 | 1) Для своих ключей критичны корректные equals/hashCode.
+     *  |                            | 2) Порядок итерации не гарантируется.
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     */
+
+    /**
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | Скорость основных операций | LinkedHashMap
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | put(key, value)            | в среднем O(1) (быстро); обычно чуть медленнее HashMap из-за поддержки порядка
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | get(key)                   | в среднем O(1) (быстро)
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | remove(key)                | в среднем O(1) (быстро)
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | containsKey(key)           | в среднем O(1) (быстро)
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | Итерация for-each          | O(n) (средне) — в порядке вставки (или в порядке обращений при accessOrder=true)
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | Преимущества               | 1) Предсказуемый порядок итерации (вставка или обращения).
+     *  |                            | 2) Дописать преимущество...
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | Недостатки                 | 1) Чуть больше накладных расходов по памяти и времени (хранится порядок).
+     *  |                            | 2) Для своих ключей критичны корректные equals/hashCode.
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     */
+
+    /**
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | Скорость основных операций | TreeMap
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | put(key, value)            | O(log n) (средне) — поддерживается сортировка ключей
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | get(key)                   | O(log n) (средне)
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | remove(key)                | O(log n) (средне)
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | containsKey(key)           | O(log n) (средне)
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | Итерация for-each          | O(n) (средне) — в отсортированном порядке ключей
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | Преимущества               | 1) Всегда отсортированный порядок по ключу.
+     *  |                            | 2) Дописать преимущество (возможно по аналогии с Set)...
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     *  | Недостатки                 | 1) Дописать недостаток (возможно по аналогии с Set)...
+     *  |                            | 2) Требует корректного сравнения (Comparable/Comparator).
+     *  | -------------------------- | ---------------------------------------------------------------------------------
+     */
+
+    /*
+    Map — необходимый набор вариантов создания (популярные случаи)
+
+    1) HashMap (хэш-отображение) — базовый выбор “по умолчанию”
+    Создание пустой map:
+    java.util.Map<Ключ, Значение> имяMap = new java.util.HashMap<>();
+
+    Создание из другой map (независимая копия пар):
+    java.util.Map<Ключ, Значение> имяMap = new java.util.HashMap<>(sourceMap);
+
+    2) LinkedHashMap (хэш-отображение с порядком) — когда нужен предсказуемый порядок итерации
+    Создание пустой map:
+    java.util.Map<Ключ, Значение> имяMap = new java.util.LinkedHashMap<>();
+
+    LRU-поведение по обращениям:
+    java.util.Map<Ключ, Значение> имяMap = new java.util.LinkedHashMap<>(16, 0.75f, true);
+
+    3) TreeMap (отсортированное отображение) — когда нужна сортировка, диапазоны и навигация
+    java.util.NavigableMap<Ключ, Значение> имяMap = new java.util.TreeMap<>();           // ключи Comparable
+    java.util.NavigableMap<Ключ, Значение> имяMap = new java.util.TreeMap<>(comparator); // порядок через Comparator
+
+    Неизменяемая map (константа/фиксированный набор пар):
+    java.util.Map<Ключ, Значение> имяMap = java.util.Map.of(ключ1, значение1, ключ2, значение2, ...);
+    java.util.Map<Ключ, Значение> имяMap = java.util.Map.copyOf(sourceMap);                  // “снимок”; null запрещён
+    java.util.Map<Ключ, Значение> имяMap = java.util.Collections.unmodifiableMap(sourceMap); // view “только чтение”
+     */
 
     // =================================================================================================================
     // 1) Создание и базовые свойства: size / isEmpty / put / get / null-особенности
@@ -229,21 +297,21 @@ public class _09_3_Map {
         Integer user1Value = targetMap.get("user-1");
         Integer missingValue = targetMap.get("missing-user");
 
-        System.out.println("   get(\"user-1\")         -> " + user1Value);
-        System.out.println("   get(\"missing-user\")   -> " + missingValue);
+        System.out.println("   get(\"user-1\")                   -> " + user1Value);
+        System.out.println("   get(\"missing-user\")             -> " + missingValue);
 
         Integer defaultedValue = targetMap.getOrDefault("missing-user", 0);
         System.out.println("   getOrDefault(\"missing-user\", 0) -> " + defaultedValue);
 
         boolean hasUser3 = targetMap.containsKey("user-3");
         boolean hasUser100 = targetMap.containsKey("user-100");
-        System.out.println("   containsKey(\"user-3\")    -> " + hasUser3);
-        System.out.println("   containsKey(\"user-100\")  -> " + hasUser100);
+        System.out.println("   containsKey(\"user-3\")           -> " + hasUser3);
+        System.out.println("   containsKey(\"user-100\")         -> " + hasUser100);
 
         boolean hasValue6 = targetMap.containsValue(6);
         boolean hasValue999 = targetMap.containsValue(999);
-        System.out.println("   containsValue(6)           -> " + hasValue6);
-        System.out.println("   containsValue(999)         -> " + hasValue999);
+        System.out.println("   containsValue(6)                -> " + hasValue6);
+        System.out.println("   containsValue(999)              -> " + hasValue999);
 
         System.out.println(
                 "   Примечание: containsValue(...) почти всегда O(n), потому что нужно пройтись по всем значениям"
@@ -261,16 +329,16 @@ public class _09_3_Map {
         System.out.println("   До удаления: " + targetMap);
 
         Integer removedValue = targetMap.remove("user-5");
-        System.out.println("   remove(\"user-5\")           -> removedValue=" + removedValue + ", map=" + targetMap);
+        System.out.println("   remove(\"user-5\")    -> removedValue=" + removedValue + ", map=" + targetMap);
 
         boolean isRemovedPair = targetMap.remove("user-4", 2);
-        System.out.println("   remove(\"user-4\", 2)        -> removed=" + isRemovedPair + ", map=" + targetMap);
+        System.out.println("   remove(\"user-4\", 2) -> removed=" + isRemovedPair + ", map=" + targetMap);
 
         isRemovedPair = targetMap.remove("user-4", 1);
-        System.out.println("   remove(\"user-4\", 1)        -> removed=" + isRemovedPair + ", map=" + targetMap);
+        System.out.println("   remove(\"user-4\", 1) -> removed=" + isRemovedPair + ", map=" + targetMap);
 
         targetMap.clear();
-        System.out.println("   clear()                     -> map=" + targetMap);
+        System.out.println("   clear()             -> map=" + targetMap);
 
         System.out.println();
     }
@@ -384,7 +452,7 @@ public class _09_3_Map {
         System.out.println("   firstMap:  " + firstMap);
         System.out.println("   secondMap: " + secondMap);
 
-        System.out.println("   firstMap.equals(secondMap) -> " + firstMap.equals(secondMap));
+        System.out.println("   firstMap.equals(secondMap)            -> " + firstMap.equals(secondMap));
         System.out.println(
                 "   firstMap.hashCode==secondMap.hashCode -> " + (firstMap.hashCode() == secondMap.hashCode())
         );
@@ -423,15 +491,15 @@ public class _09_3_Map {
         mutableMap.put("user-2", 5);
 
         java.util.Map<String, Integer> snapshotCopy = java.util.Map.copyOf(mutableMap);
-        System.out.println("   Map.copyOf (snapshot): " + snapshotCopy);
+        System.out.println("   Map.copyOf (снимок): " + snapshotCopy);
 
         java.util.Map<String, Integer> readOnlyView = java.util.Collections.unmodifiableMap(mutableMap);
         System.out.println("   unmodifiableMap (view): " + readOnlyView);
 
         mutableMap.put("user-3", 1);
         System.out.println("   После изменения mutableMap: mutableMap=" + mutableMap);
-        System.out.println("   snapshotCopy НЕ меняется:  snapshotCopy=" + snapshotCopy);
-        System.out.println("   readOnlyView меняется:     readOnlyView=" + readOnlyView);
+        System.out.println("   snapshotCopy НЕ меняется:   snapshotCopy=" + snapshotCopy);
+        System.out.println("   readOnlyView меняется:      readOnlyView=" + readOnlyView);
 
         try {
             readOnlyView.put("user-4", 100);
@@ -453,7 +521,7 @@ public class _09_3_Map {
         insertionOrderMap.put("A", 1);
         insertionOrderMap.put("B", 2);
         insertionOrderMap.put("C", 3);
-        System.out.println("   LinkedHashMap (insertion order): " + insertionOrderMap);
+        System.out.println("   LinkedHashMap (порядок вставки): " + insertionOrderMap);
 
         java.util.Map<String, Integer> accessOrderMap = new java.util.LinkedHashMap<>(16, 0.75f, true);
         accessOrderMap.put("A", 1);
@@ -463,7 +531,7 @@ public class _09_3_Map {
         System.out.println("   До обращений (accessOrder=true): " + accessOrderMap);
         accessOrderMap.get("A");
         accessOrderMap.get("B");
-        System.out.println("   После get(\"A\"), get(\"B\"):      " + accessOrderMap);
+        System.out.println("   После get(\"A\"), get(\"B\"):        " + accessOrderMap);
 
         LruCache<String, Integer> lruCache = new LruCache<>(3);
         lruCache.put("user-1", 10);
@@ -500,16 +568,16 @@ public class _09_3_Map {
 
         java.util.NavigableMap<Integer, String> headMapInclusive = eventsByTimestamp.headMap(110, true);
         java.util.NavigableMap<Integer, String> tailMapExclusive = eventsByTimestamp.tailMap(110, false);
-        System.out.println("   headMap(to=110, inclusive=true)  -> " + headMapInclusive);
-        System.out.println("   tailMap(from=110, inclusive=false) -> " + tailMapExclusive);
+        System.out.println("   headMap(to=110, включительно) -> " + headMapInclusive);
+        System.out.println("   tailMap(from=110, не включая) -> " + tailMapExclusive);
 
         java.util.NavigableMap<Integer, String> subMap = eventsByTimestamp.subMap(105, true, 120, false);
-        System.out.println("   subMap(from=105, inclusive=true, to=120, inclusive=false) -> " + subMap);
+        System.out.println("   subMap(105 включительно .. 120 не включая) -> " + subMap);
 
         System.out.println("   Важно: headMap/tailMap/subMap — это view, изменения отражаются в исходной map");
         subMap.put(108, "изменено имя");
         System.out.println("   После subMap.put(108, ...): subMap=" + subMap);
-        System.out.println("   Исходная map изменилась:     eventsByTimestamp=" + eventsByTimestamp);
+        System.out.println("   Исходная map изменилась:    eventsByTimestamp=" + eventsByTimestamp);
 
         java.util.Map.Entry<Integer, String> firstEntry = eventsByTimestamp.pollFirstEntry();
         System.out.println("   pollFirstEntry() -> " + firstEntry + ", осталось=" + eventsByTimestamp);
