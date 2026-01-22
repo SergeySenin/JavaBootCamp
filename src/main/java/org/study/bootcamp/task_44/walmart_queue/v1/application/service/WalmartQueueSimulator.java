@@ -14,6 +14,7 @@ public class WalmartQueueSimulator {
         if (customers == null) {
             throw new IllegalArgumentException("массив покупателей не должен быть null");
         }
+
         this.cashiersCount = cashiersCount;
         this.customers = customers;
     }

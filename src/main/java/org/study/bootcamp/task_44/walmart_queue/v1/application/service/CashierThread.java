@@ -16,6 +16,7 @@ public class CashierThread extends Thread {
         if (customerItems == null) {
             throw new IllegalArgumentException("массив товаров не должен быть null");
         }
+
         // ВАЖНО: в этой задаче каждый поток = один покупатель.
         // cashierId — только метка выбранной кассы.
         // Строгую очередь к одной кассе мы не моделируем:
