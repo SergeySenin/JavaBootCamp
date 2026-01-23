@@ -16,6 +16,7 @@ public class Boss {
         if (maxPlayers <= 0) {
             throw new IllegalArgumentException("maxPlayers должен быть больше 0");
         }
+
         this.maxPlayers = maxPlayers;
         this.currentPlayers = 0;
     }

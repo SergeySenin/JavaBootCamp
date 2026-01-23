@@ -10,6 +10,7 @@ public class Player {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Имя игрока не должно быть пустым");
         }
+
         this.name = name;
     }
 
