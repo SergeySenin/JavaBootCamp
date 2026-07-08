@@ -28,17 +28,17 @@
 
 ### Запуск демо-классов
 1. После сборки классы располагаются в `build/classes/java/main`.
-2. Запустите нужный `Demo` в зависимости от задачи, подставив корректный пакет `org.study.bootcamp.task_<номер>...Demo`:
+2. Запустите нужный `Demo` в зависимости от задачи, подставив корректный пакет `org.study.bootcamp.task<номер>...Demo`:
   - Linux/macOS:
-  `java -cp build/classes/java/main org.study.bootcamp.task_14.lambda_spellcasting.v1.api.cli.Demo`
+  `java -cp build/classes/java/main org.study.bootcamp.task14.lambdaspellcasting.v1.api.cli.Demo`
   - Windows (PowerShell):
-  `java -cp "./build/classes/java/main" org.study.bootcamp.task_14.lambda_spellcasting.v1.api.cli.Demo`
+  `java -cp "./build/classes/java/main" org.study.bootcamp.task14.lambdaspellcasting.v1.api.cli.Demo`
 
 ## Структура проекта
 
 ### Учебные задачи
 Пакеты в `src/main/java/org/study/bootcamp` названы по номеру задания
-(например, `task_14/lambda_spellcasting`, `task_28/matrix_transform`, `task_42/king_tournament`).
+(например, `task14/lambdaspellcasting`, `task28/matrixtransform`, `task42/kingtournament`).
 Внутри — базовые модели, сервисы и консольные точки входа для тренировки.
 
 ### Учебные датасеты
