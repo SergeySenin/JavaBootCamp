@@ -5,11 +5,13 @@ public class Solution47 {
         boolean hasInvitation = true;
         boolean dressCodeMet = false;
         boolean passwordIsCorrect = true;
+
         boolean admitted = hasInvitation && dressCodeMet && passwordIsCorrect;
-        boolean admitted0 = (hasInvitation && dressCodeMet) && passwordIsCorrect;
-        boolean admitted1 = hasInvitation && (dressCodeMet && passwordIsCorrect);
+        boolean admittedLeftGrouped = (hasInvitation && dressCodeMet) && passwordIsCorrect;
+        boolean admittedRightGrouped = hasInvitation && (dressCodeMet && passwordIsCorrect);
+
         System.out.println(admitted);
-        System.out.println(admitted0);
-        System.out.println(admitted1);
+        System.out.println(admittedLeftGrouped);
+        System.out.println(admittedRightGrouped);
     }
 }

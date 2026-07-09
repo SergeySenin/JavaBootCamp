@@ -2,11 +2,14 @@ package org.study.javarush.java.core.level02.tasks02.d;
 
 public class Solution24 {
     public static void main(String[] args) {
-        String negativeNumber1 = "-10";
-        String negativeNumber2 = "-25";
-        int number1 = Integer.parseInt(negativeNumber1);
-        int number2 = Integer.parseInt(negativeNumber2);
-        int result = number1 + number2;
-        System.out.println(result);
+        String firstScoreText = "-10";
+        String secondScoreText = "-25";
+
+        int firstScore = Integer.parseInt(firstScoreText);
+        int secondScore = Integer.parseInt(secondScoreText);
+
+        int totalScore = firstScore + secondScore;
+
+        System.out.println(totalScore);
     }
 }

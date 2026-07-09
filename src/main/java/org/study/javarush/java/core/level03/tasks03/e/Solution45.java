@@ -5,7 +5,9 @@ public class Solution45 {
         boolean toTheSea = true;
         boolean hasPlaneTickets = false;
         boolean hasHotelRooms = true;
+
         boolean vacationHappened = toTheSea || hasPlaneTickets && hasHotelRooms;
+
         System.out.println(vacationHappened);
     }
 }

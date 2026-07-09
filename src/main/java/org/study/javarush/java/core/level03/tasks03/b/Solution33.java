@@ -3,6 +3,7 @@ package org.study.javarush.java.core.level03.tasks03.b;
 public class Solution33 {
     public static void main(String[] args) {
         int visitorAge = 17;
+
         if (visitorAge < 18) {
             System.out.println("Доступ запрещен");
         } else {

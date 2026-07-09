@@ -5,11 +5,11 @@ import java.util.Scanner;
 public class Solution40 {
     public static void main(String[] args) {
         Scanner console = new Scanner(System.in);
-        System.out.println("Введите ваш возраст:");
+
         int age = console.nextInt();
         console.nextLine();
-        System.out.println("У вас есть клубная карта? (да/нет):");
-        String hasClubCard = console.nextLine().trim().toLowerCase();
+        String hasClubCard = console.nextLine();
+
         if (age >= 65) {
             System.out.println("Ваша скидка: 20%.");
         } else {

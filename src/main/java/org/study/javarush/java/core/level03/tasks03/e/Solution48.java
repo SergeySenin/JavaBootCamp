@@ -6,9 +6,11 @@ public class Solution48 {
         boolean hasJob = true;
         boolean hasCreditHistory = false;
         boolean hasGuarantor = true;
-        boolean b1 = (yourAge > 21 && hasJob) || (hasCreditHistory && hasGuarantor);
-        boolean b2 = (yourAge > 21) && (hasJob || hasCreditHistory) && hasGuarantor;
-        System.out.println(b1);
-        System.out.println(b2);
+
+        boolean approvedByFirstRule = (yourAge > 21 && hasJob) || (hasCreditHistory && hasGuarantor);
+        boolean approvedBySecondRule = (yourAge > 21) && (hasJob || hasCreditHistory) && hasGuarantor;
+
+        System.out.println(approvedByFirstRule);
+        System.out.println(approvedBySecondRule);
     }
 }

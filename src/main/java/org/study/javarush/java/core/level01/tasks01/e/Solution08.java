@@ -5,6 +5,7 @@ public class Solution08 {
         String userName = "Alice";
         int userAge = 20;
         String profileInfo = "Имя: " + userName + ", Возраст: " + userAge;
-        System.out.print(profileInfo);
+
+        System.out.println(profileInfo);
     }
 }

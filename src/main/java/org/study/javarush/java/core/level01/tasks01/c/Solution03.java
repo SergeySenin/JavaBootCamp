@@ -5,7 +5,8 @@ public class Solution03 {
         System.out.print("Я");
         System.out.print(" учу");
         System.out.println(" Java.");
+
         System.out.print("Это");
-        System.out.print(" интересно!");
+        System.out.println(" интересно!");
     }
 }
