@@ -28,11 +28,12 @@
 
 ### Запуск демо-классов
 1. После сборки классы располагаются в `build/classes/java/main`.
-2. Запустите нужный `Demo` в зависимости от задачи, подставив корректный пакет `org.study.bootcamp.task<номер>...Demo`:
+2. Запустите нужный `Demo` в зависимости от задачи, подставив корректный
+   пакет `org.study.bootcamp.task<номер>...Demo`:
   - Linux/macOS:
-  `java -cp build/classes/java/main org.study.bootcamp.task14.lambdaspellcasting.v1.api.cli.Demo`
+`java -cp build/classes/java/main cli.api.org.study.bootcamp.task14.lambda.spellcasting.v1.Demo`
   - Windows (PowerShell):
-  `java -cp "./build/classes/java/main" org.study.bootcamp.task14.lambdaspellcasting.v1.api.cli.Demo`
+`java -cp "./build/classes/java/main" cli.api.org.study.bootcamp.task14.lambda.spellcasting.v1.Demo`
 
 ## Структура проекта
 
@@ -43,19 +44,24 @@
 
 ### Учебные датасеты
 В `src/main/resources` лежат вспомогательные наборы данных:
-профили пользователей, продукты и заказы, вакансии, оценки студентов, CSV с экологическими показателями.
+профили пользователей, продукты и заказы, вакансии,
+оценки студентов, CSV с экологическими показателями.
 Их можно использовать для упражнений по фильтрации, агрегации и сериализации.
 
 ## Зависимости
 Проект собирается плагином `java` и использует
-SLF4J и Logback для логирования, Lombok для генерации шаблонного кода, Apache Commons Lang3 и Gson для утилит.
-JUnit Jupiter и Mockito применяются для тестирования. Версии указаны в `build.gradle` и подтягиваются из Maven Central.
+SLF4J и Logback для логирования, Lombok для генерации шаблонного кода,
+Apache Commons Lang3 и Gson для утилит.
+JUnit Jupiter и Mockito применяются для тестирования.
+Версии указаны в `build.gradle` и подтягиваются из Maven Central.
 
 ## Тестирование
-Отдельного каталога `src/test` нет, но команду сборки можно использовать для проверки компиляции проекта:
+Отдельного каталога `src/test` нет, но команду сборки можно использовать для
+проверки компиляции проекта:
 - Linux/macOS:          `./gradlew test`
 - Windows (PowerShell): `./gradlew.bat test`
 
 ## Полезные материалы
 В `src/main/java/org/study/bootcamp/info/HELPME.md` собрана памятка по
-темам буткемпа, ссылкам на видео и советам по решению задач. Используйте её как чек-лист при выполнении практики.
+темам буткемпа, ссылкам на видео и советам по решению задач.
+Используйте её как чек-лист при выполнении практики.
